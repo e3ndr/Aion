@@ -1,0 +1,14 @@
+# IntelliJ
+*.iml
+.idea/
+
+# Eclipse
+.settings/
+.project
+.classpath
+
+# Common
+*target/
+dist/jeofetch.jar
+dist/jeofetch.zip
+.DS_Store

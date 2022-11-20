@@ -57,7 +57,6 @@ public class AionPackage {
         private String patch;
 
         private List<String> depends = Collections.emptyList();
-        private List<String> conflicts = Collections.emptyList();
 
         @JsonExclude
         private Map<String, String> commands = new HashMap<>();

@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
-import xyz.e3ndr.aion.SourceResolver;
+import xyz.e3ndr.aion.Resolver;
 import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesAdd;
 import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRefresh;
 import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRemove;
@@ -51,7 +51,7 @@ public class CommandSources implements Runnable {
             .parallelStream()
             .map((url) -> {
                 try {
-                    return SourceResolver.resolve(url);
+                    return Resolver.resolve(url);
                 } catch (IOException e) {
                     Aion.LOGGER.fatal("An error occurred whilst grabbing sourcelist:\n%s", e);
                     try {

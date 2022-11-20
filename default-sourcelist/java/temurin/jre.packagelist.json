@@ -31,7 +31,9 @@
         },
         "extract": {
           "base": "jdk8u352-b08-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       },
       "11": {
@@ -59,7 +61,9 @@
         },
         "extract": {
           "base": "jdk-11.0.17+8-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       },
       "16": {
@@ -71,7 +75,9 @@
         },
         "extract": {
           "base": "jdk-16.0.2+7-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       },
       "17": {
@@ -99,7 +105,9 @@
         },
         "extract": {
           "base": "jdk-17.0.5+8-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       },
       "18": {
@@ -127,7 +135,9 @@
         },
         "extract": {
           "base": "jdk-18.0.2.1+1-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       },
       "19": {
@@ -155,7 +165,9 @@
         },
         "extract": {
           "base": "jdk-19.0.1+10-jre",
-          "keep": null
+          "discard": [
+            "release"
+          ]
         }
       }
     }

@@ -128,7 +128,7 @@ function parseReleaseInfo(json) {
         },
         extract: {
           base: json.name + "-jre", // Move into this sub-folder.
-          keep: null, // Everything.
+          discard: ["release"],
         },
       },
     ],

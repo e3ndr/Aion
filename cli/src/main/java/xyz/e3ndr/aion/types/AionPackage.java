@@ -28,6 +28,7 @@ public class AionPackage {
     };
 
     private String slug;
+    private List<String> aliases = Collections.emptyList();
     private String latest;
 
     @JsonExclude

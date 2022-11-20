@@ -27,7 +27,7 @@ public class AionSourceList {
 
     public @Nullable AionPackage.Version findPackage(String slug, String version) {
         Optional<Version> result = this.packageList.parallelStream()
-            .filter((pkg) -> pkg.getSlug().equals(slug)) // Match the slug
+            .filter((pkg) -> pkg.getSlug().equals(slug) || pkg.getAliases().contains(slug)) // Match the slug or alias
             .filter((pkg) -> pkg.getVersions().containsKey(version)) // See if it contains the requested version
             .map((pkg) -> pkg.getVersions().get(version)) // Create the result
             .findAny();

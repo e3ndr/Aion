@@ -5,7 +5,7 @@ import picocli.CommandLine.Command;
 import xyz.e3ndr.aion.Bootstrap;
 import xyz.e3ndr.aion.types.AionPackage;
 
-@Command(name = "list", description = "Lists all installed packages")
+@Command(name = "list", description = "Lists all installed packages.")
 public class CommandList implements Runnable {
 
     @SneakyThrows

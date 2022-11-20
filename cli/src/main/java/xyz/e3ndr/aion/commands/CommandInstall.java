@@ -19,7 +19,7 @@ import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
 
-@Command(name = "install", description = "Installs the specified list of packages")
+@Command(name = "install", description = "Installs the specified list of packages.")
 public class CommandInstall implements Runnable {
 
     @Option(names = {

@@ -15,11 +15,18 @@ import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRemove;
 import xyz.e3ndr.aion.configuration.Sources;
 import xyz.e3ndr.aion.types.AionSourceList;
 
-@Command(name = "sources", description = "Lists all configured sources", subcommands = {
+// @formatter:off
+@Command(
+    name = "sources", 
+    description = "Lists all configured sources, run `aion sources --help` to see subcommands.", 
+    mixinStandardHelpOptions = true, 
+    subcommands = {
         CommandSourcesAdd.class,
         CommandSourcesRemove.class,
         CommandSourcesRefresh.class
-})
+    }
+)
+//@formatter:on
 public class CommandSources implements Runnable {
 
     @Override
@@ -61,7 +68,7 @@ public class CommandSources implements Runnable {
         return 0;
     }
 
-    @Command(name = "add", description = "Adds the specified sources")
+    @Command(name = "add", description = "Adds the specified sources.")
     public static class CommandSourcesAdd implements Runnable {
 
         @Parameters(arity = "1..*", description = "The list of sources to add", paramLabel = "[URL]")
@@ -96,7 +103,7 @@ public class CommandSources implements Runnable {
 
     }
 
-    @Command(name = "remove", description = "Removes the specified sources")
+    @Command(name = "remove", description = "Removes the specified sources.")
     public static class CommandSourcesRemove implements Runnable {
 
         @Parameters(/*arity = "1..*", */description = "The list of sources to remove", paramLabel = "[URL]")
@@ -131,7 +138,7 @@ public class CommandSources implements Runnable {
 
     }
 
-    @Command(name = "refresh", description = "Refreshes the local sourcelist cache")
+    @Command(name = "refresh", description = "Refreshes the local sourcelist cache.")
     public static class CommandSourcesRefresh implements Runnable {
 
         @SneakyThrows

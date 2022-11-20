@@ -24,6 +24,11 @@ public class CommandSources implements Runnable {
 
     @Override
     public void run() {
+        if (Bootstrap.getSourceCache().isEmpty()) {
+            Bootstrap.LOGGER.info("No sources configured.");
+            return;
+        }
+
         Bootstrap.LOGGER.info("Sources:");
         for (AionSourceList sourcelist : Bootstrap.getSourceCache()) {
             Bootstrap.LOGGER.info("    %s (%s)", sourcelist.getName(), sourcelist.getUrl());

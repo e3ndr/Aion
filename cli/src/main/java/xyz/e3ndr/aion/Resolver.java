@@ -1,12 +1,14 @@
 package xyz.e3ndr.aion;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.List;
 
+import co.casterlabs.rakurai.io.IOUtil;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import okhttp3.OkHttpClient;
@@ -18,15 +20,22 @@ import xyz.e3ndr.aion.types.AionSourceList;
 public class Resolver {
     public static final OkHttpClient client = new OkHttpClient();
 
-    public static <T> T get(String url, Class<T> expected) throws IOException {
-        return Rson.DEFAULT.fromJson(get(url), expected);
+    /* -------------------- */
+    /* Location Resolving   */
+    /* -------------------- */
+
+    public static <T> T get(String location, Class<T> expected) throws IOException {
+        return get(location, TypeToken.of(expected));
     }
 
-    public static <T> T get(String url, TypeToken<T> expected) throws IOException {
-        return Rson.DEFAULT.fromJson(get(url), expected);
+    public static <T> T get(String location, TypeToken<T> expected) throws IOException {
+        try (InputStream in = get(location)) {
+            String json = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
+            return Rson.DEFAULT.fromJson(json, expected);
+        }
     }
 
-    private static String get(String location) throws IOException {
+    public static InputStream get(String location) throws IOException {
         URI uri = URI.create(location);
         String scheme = uri.getScheme().toLowerCase();
 
@@ -34,10 +43,8 @@ public class Resolver {
         switch (scheme) {
             case "file": {
                 File file = new File(uri.getPath());
-                String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 
-                Aion.LOGGER.trace("File %s:\n%s", uri, content);
-                return content;
+                return new FileInputStream(file);
             }
 
             case "http": {
@@ -51,9 +58,7 @@ public class Resolver {
                         .url(uri.toString())
                         .build()
                 ).execute()) {
-                    String body = response.body().string();
-                    Aion.LOGGER.trace("Response from %s:\n%s", uri, body);
-                    return body;
+                    return response.body().byteStream();
                 }
             }
 
@@ -70,9 +75,13 @@ public class Resolver {
         }
     }
 
-    public static AionSourceList resolve(String url) throws IOException {
-        Aion.LOGGER.debug("Fetching sourcelist: %s", url);
-        return resolveAdditionalSource(url, "/sourcelist.json");
+    /* -------------------- */
+    /* Source Resolving     */
+    /* -------------------- */
+
+    public static AionSourceList resolve(String location) throws IOException {
+        Aion.LOGGER.debug("Fetching sourcelist: %s", location);
+        return resolveAdditionalSource(location, "/sourcelist.json");
     }
 
     @SuppressWarnings("deprecation")

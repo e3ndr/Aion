@@ -19,7 +19,7 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class Bootstrap {
     public static final FastLogger LOGGER = new FastLogger("Aion");
 
-    private static final File CONFIG_FILE = new File("config.json");
+    static final File CONFIG_FILE = new File("config.json");
     private static final BaseCommand BASE = new BaseCommand();
 
     private static @Getter Config config = new Config();
@@ -33,44 +33,27 @@ public class Bootstrap {
             };
         }
 
-        if (CONFIG_FILE.exists()) {
-            try {
-                String content = new String(
-                    Files.readAllBytes(CONFIG_FILE.toPath()),
-                    StandardCharsets.UTF_8
-                );
-                config = Rson.DEFAULT.fromJson(content, Config.class);
-            } catch (IOException e) {
-                LOGGER.fatal("Unable to parse config file:\n%s", e);
-                System.exit(1);
-            }
-        }
-
         new CommandLine(BASE)
             .setExecutionStrategy((parseResult) -> {
                 BASE.setup(); // Intercept execution, do setup, then execute.
+
+                if (CONFIG_FILE.exists()) {
+                    try {
+                        String content = new String(
+                            Files.readAllBytes(CONFIG_FILE.toPath()),
+                            StandardCharsets.UTF_8
+                        );
+                        config = Rson.DEFAULT.fromJson(content, Config.class);
+                    } catch (IOException e) {
+                        LOGGER.fatal("Unable to parse config file:\n%s", e);
+                        System.exit(1);
+                    }
+                }
+
                 config.save();
                 return new CommandLine.RunLast().execute(parseResult);
             })
             .execute(args);
-    }
-
-    @Getter
-    @JsonClass(exposeAll = true)
-    public static class Config {
-
-        public void save() {
-            try {
-                Files.write(
-                    CONFIG_FILE.toPath(),
-                    Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
-                );
-                LOGGER.debug("Updated config.");
-            } catch (IOException e) {
-                LOGGER.severe("Unable to save config, changes/settings will NOT persist.\n%s", e.getMessage());
-            }
-        }
-
     }
 
     // @formatter:off

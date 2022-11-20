@@ -21,6 +21,7 @@ public class Aion {
     // @formatter:on
 
     public static final FastLogger LOGGER = new FastLogger("Aion");
+    public static final String TEMP_FILE_EXT = ".tmp";
 
     private static Config _config;
     private static List<AionSourceList> _sourceCache;
@@ -30,6 +31,13 @@ public class Aion {
         DOWNLOAD_DIR.mkdirs();
         PACKAGES_DIR.mkdirs();
         PATH_DIR.mkdirs();
+
+        // Clean out the download dir of any partial downloads.
+        for (File file : DOWNLOAD_DIR.listFiles()) {
+            if (file.getName().endsWith(TEMP_FILE_EXT)) {
+                file.delete();
+            }
+        }
 
     }
 

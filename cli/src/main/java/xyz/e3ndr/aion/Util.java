@@ -15,6 +15,14 @@ public class Util {
         file.delete();
     }
 
+    public static void recursivelyMoveDirectoryContents(File sourceDir, File destDir) {
+        for (String filename : sourceDir.list()) {
+            File sourceFile = new File(sourceDir, filename);
+            File destFile = new File(destDir, filename);
+            sourceFile.renameTo(destFile);
+        }
+    }
+
     @SafeVarargs
     public static <T> List<T> concat(List<T>... lists) {
         List<T> list = new LinkedList<>();

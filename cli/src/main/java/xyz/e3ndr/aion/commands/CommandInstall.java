@@ -110,7 +110,7 @@ public class CommandInstall implements Runnable {
 
             File downloadWorkingDir = new File(
                 Aion.DOWNLOAD_DIR,
-                String.format("%s-%s", version.getPkg().getSlug(), version.getVersion())
+                String.format("%s/%s", version.getPkg().getSlug(), version.getVersion())
             );
             File downloadedFile = new File(downloadWorkingDir, "package" + format.extension);
 
@@ -120,6 +120,7 @@ public class CommandInstall implements Runnable {
                 File tempFile = new File(downloadedFile.toString() + Aion.TEMP_FILE_EXT);
                 Aion.LOGGER.info("Downloading '%s' to '%s'", binaryLocation, tempFile);
 
+                downloadWorkingDir.mkdirs();
                 IOUtil.writeInputStreamToOutputStream(Resolver.get(binaryLocation), new FileOutputStream(tempFile));
 
                 tempFile.renameTo(downloadedFile);
@@ -129,11 +130,29 @@ public class CommandInstall implements Runnable {
             format.extractor.extract(downloadedFile, downloadWorkingDir, version.getExtractionPlan());
             downloadedFile.delete();
 
-            // TODO move the files.
-            // TODO build the path executables.
+            File packageWorkingDir = new File(
+                Aion.PACKAGES_DIR,
+                String.format("%s/%s", version.getPkg().getSlug(), version.getVersion())
+            );
+            File packageBinaryDir = new File(packageWorkingDir, "binary");
+            File packageCommandDir = new File(packageWorkingDir, "commands");
+
+            // Empty out the workingDir if it already exists. Could cause conflicts.
+            Util.recursivelyDeleteDirectory(packageWorkingDir);
+
+            // Make the directories.
+            packageBinaryDir.mkdirs();
+            packageCommandDir.mkdirs();
+
+            // Copy the extracted content to the package's binary directory.
+            // Then, delete the downloadWorkingDir.
+            Util.recursivelyMoveDirectoryContents(downloadWorkingDir, packageBinaryDir);
+            Util.recursivelyDeleteDirectory(downloadWorkingDir);
+
+            // TODO build the command executables.
+
             // TODO update the path if another package isn't already managing it.
 
-            Util.recursivelyDeleteDirectory(downloadWorkingDir);
         }
 
 //        Installed.save(newInstallCache);

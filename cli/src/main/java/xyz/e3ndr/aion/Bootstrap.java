@@ -7,6 +7,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import xyz.e3ndr.aion.commands.CommandInstall;
 import xyz.e3ndr.aion.commands.CommandSources;
+import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;

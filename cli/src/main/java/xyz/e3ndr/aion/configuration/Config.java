@@ -1,4 +1,4 @@
-package xyz.e3ndr.aion;
+package xyz.e3ndr.aion.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.validation.JsonValidate;
 import lombok.Getter;
+import xyz.e3ndr.aion.Bootstrap;
 
 @Getter
 @JsonClass(exposeAll = true)

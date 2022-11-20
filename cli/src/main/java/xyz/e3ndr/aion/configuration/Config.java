@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import co.casterlabs.rakurai.json.Rson;
@@ -17,7 +17,7 @@ import xyz.e3ndr.aion.Bootstrap;
 @Getter
 @JsonClass(exposeAll = true)
 public class Config {
-    private static final File CONFIG_FILE = new File("config.json");
+    private static final File FILE = new File("config.json");
 
     private List<String> sources = null;
 
@@ -25,14 +25,14 @@ public class Config {
     private void $validate() {
         if (this.sources == null) {
             Bootstrap.LOGGER.debug("Configured sources is null, setting to default.");
-            this.sources = new ArrayList<>(Arrays.asList("test///"));
+            this.sources = new LinkedList<>(Arrays.asList("test///"));
         }
     }
 
     public void save() {
         try {
             Files.write(
-                CONFIG_FILE.toPath(),
+                FILE.toPath(),
                 Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
             );
             Bootstrap.LOGGER.debug("Updated config.");
@@ -42,10 +42,10 @@ public class Config {
     }
 
     public static Config load() {
-        if (CONFIG_FILE.exists()) {
+        if (FILE.exists()) {
             try {
                 String content = new String(
-                    Files.readAllBytes(CONFIG_FILE.toPath()),
+                    Files.readAllBytes(FILE.toPath()),
                     StandardCharsets.UTF_8
                 );
                 return Rson.DEFAULT.fromJson(content, Config.class);

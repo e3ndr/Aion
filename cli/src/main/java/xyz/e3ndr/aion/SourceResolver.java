@@ -33,7 +33,7 @@ public class SourceResolver {
             sourcelist.getPackageList().addAll(add);
         }
 
-        sourcelist.clearAdditional();
+        sourcelist.makeInternal(baseUrl);
 
         return sourcelist;
     }

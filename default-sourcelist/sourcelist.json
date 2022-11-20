@@ -1,0 +1,7 @@
+{
+    "name": "Aion Default Sources",
+    "additionalSources": [
+        "/java/sourcelist.json"
+    ],
+    "additionalPackages": []
+}

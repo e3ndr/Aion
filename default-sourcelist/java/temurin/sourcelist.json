@@ -1,0 +1,7 @@
+{
+    "additionalSources": [],
+    "additionalPackages": [
+        "/java/temurin/jdk.packagelist.json",
+        "/java/temurin/jre.packagelist.json"
+    ]
+}

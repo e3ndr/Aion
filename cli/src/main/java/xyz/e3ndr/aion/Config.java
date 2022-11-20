@@ -15,6 +15,16 @@ import lombok.Getter;
 @Getter
 @JsonClass(exposeAll = true)
 public class Config {
+    private List<String> sources = null;
+
+    @JsonValidate
+    private void $validate() {
+        if (this.sources == null) {
+            Bootstrap.LOGGER.debug("Configured sources is null, setting to default.");
+            this.sources = new ArrayList<>(Arrays.asList("test///"));
+        }
+    }
+
     public void save() {
         try {
             Files.write(

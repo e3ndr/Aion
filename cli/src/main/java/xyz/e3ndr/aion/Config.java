@@ -1,5 +1,6 @@
 package xyz.e3ndr.aion;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,6 +16,8 @@ import lombok.Getter;
 @Getter
 @JsonClass(exposeAll = true)
 public class Config {
+    private static final File CONFIG_FILE = new File("config.json");
+
     private List<String> sources = null;
 
     @JsonValidate
@@ -28,12 +31,32 @@ public class Config {
     public void save() {
         try {
             Files.write(
-                Bootstrap.CONFIG_FILE.toPath(),
+                CONFIG_FILE.toPath(),
                 Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
             );
             Bootstrap.LOGGER.debug("Updated config.");
         } catch (IOException e) {
             Bootstrap.LOGGER.severe("Unable to save config, changes/settings will NOT persist.\n%s", e.getMessage());
+        }
+    }
+
+    public static Config load() {
+        if (CONFIG_FILE.exists()) {
+            try {
+                String content = new String(
+                    Files.readAllBytes(CONFIG_FILE.toPath()),
+                    StandardCharsets.UTF_8
+                );
+                return Rson.DEFAULT.fromJson(content, Config.class);
+            } catch (IOException e) {
+                Bootstrap.LOGGER.fatal("Unable to parse config file:\n%s", e);
+                System.exit(1);
+                return null; // Compilier.
+            }
+        } else {
+            Config config = new Config();
+            config.save();
+            return config;
         }
     }
 

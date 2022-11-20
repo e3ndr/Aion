@@ -1,17 +1,12 @@
 package xyz.e3ndr.aion;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-
-import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import xyz.e3ndr.aion.commands.CommandInstall;
+import xyz.e3ndr.aion.commands.CommandSources;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 import xyz.e3ndr.fastloggingframework.logging.LogLevel;
@@ -19,10 +14,9 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 public class Bootstrap {
     public static final FastLogger LOGGER = new FastLogger("Aion");
 
-    static final File CONFIG_FILE = new File("config.json");
     private static final BaseCommand BASE = new BaseCommand();
 
-    private static @Getter Config config = new Config();
+    private static @Getter Config config;
 
     public static void main(String[] args) throws InterruptedException {
         FastLoggingFramework.setLogHandler(new LogHandler());
@@ -37,20 +31,8 @@ public class Bootstrap {
             .setExecutionStrategy((parseResult) -> {
                 BASE.setup(); // Intercept execution, do setup, then execute.
 
-                if (CONFIG_FILE.exists()) {
-                    try {
-                        String content = new String(
-                            Files.readAllBytes(CONFIG_FILE.toPath()),
-                            StandardCharsets.UTF_8
-                        );
-                        config = Rson.DEFAULT.fromJson(content, Config.class);
-                    } catch (IOException e) {
-                        LOGGER.fatal("Unable to parse config file:\n%s", e);
-                        System.exit(1);
-                    }
-                }
+                config = Config.load();
 
-                config.save();
                 return new CommandLine.RunLast().execute(parseResult);
             })
             .execute(args);
@@ -65,6 +47,7 @@ public class Bootstrap {
         version = "1.0.0",
         subcommands = {
             CommandInstall.class,
+            CommandSources.class
         }
     )
     // @formatter:on

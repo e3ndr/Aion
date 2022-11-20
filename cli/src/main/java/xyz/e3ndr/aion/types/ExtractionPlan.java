@@ -10,4 +10,23 @@ public class ExtractionPlan {
     private String[] keep = null;
     private String[] discard = {};
 
+    public boolean allowFile(String filename) {
+        for (String regex : this.discard) {
+            if (filename.matches(regex)) {
+                return false;
+            }
+        }
+
+        // Null means ALL.
+        if (this.keep == null) return true;
+
+        for (String regex : this.keep) {
+            if (filename.matches(regex)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

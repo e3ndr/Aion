@@ -147,7 +147,7 @@ public class CommandInstall implements Runnable {
             // Copy the extracted content to the package's binary directory.
             // Then, delete the downloadWorkingDir.
             Util.recursivelyMoveDirectoryContents(downloadWorkingDir, packageBinaryDir);
-            Util.recursivelyDeleteDirectory(downloadWorkingDir);
+            Util.recursivelyDeleteDirectory(downloadWorkingDir.getParentFile());
 
             // TODO build the command executables.
 

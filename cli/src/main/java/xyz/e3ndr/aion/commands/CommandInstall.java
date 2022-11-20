@@ -47,7 +47,7 @@ public class CommandInstall implements Runnable {
 
         Aion.LOGGER.info("The following packages will be installed:");
         for (AionPackage.Version version : packages) {
-            Aion.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
+            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPackageSlug(), version.getVersion(), version.getPatch(), version.getPackageAliases());
         }
 
         Aion.LOGGER.info("Resolving dependencies...");
@@ -63,7 +63,7 @@ public class CommandInstall implements Runnable {
         } else {
             Aion.LOGGER.info("The following dependencies will be installed:");
             for (AionPackage.Version version : dependencies) {
-                Aion.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
+                Aion.LOGGER.info("    %s:%s (%s) %s", version.getPackageSlug(), version.getVersion(), version.getPatch(), version.getPackageAliases());
             }
         }
 

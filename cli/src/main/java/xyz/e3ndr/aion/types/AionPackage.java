@@ -44,6 +44,7 @@ public class AionPackage {
             Version version = entry.getValue();
             version.version = entry.getKey();
             version.packageSlug = this.slug;
+            version.packageAliases = this.aliases;
         }
     }
 
@@ -54,6 +55,8 @@ public class AionPackage {
         };
 
         private String packageSlug;
+        private List<String> packageAliases;
+
         private String version;
         private String patch;
 

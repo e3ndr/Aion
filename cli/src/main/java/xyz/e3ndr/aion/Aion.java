@@ -15,9 +15,9 @@ public class Aion {
     public static final File BASE_DIR = new File(System.getProperty("aion.basedir", "."));
     public static final FastLogger LOGGER = new FastLogger("Aion");
 
-    private static Config config;
-    private static List<AionSourceList> sourceCache;
-    private static List<AionPackage.Version> installCache;
+    private static Config _config;
+    private static List<AionSourceList> _sourceCache;
+    private static List<AionPackage.Version> _installCache;
 
     public static void setup() {
         // :^)
@@ -26,27 +26,27 @@ public class Aion {
     // Getters, we want to load these things on-demand.
 
     public static Config config() {
-        if (config == null) {
-            config = Config.load();
+        if (_config == null) {
+            _config = Config.load();
         }
 
-        return config;
+        return _config;
     }
 
     public static List<AionSourceList> sourceCache() {
-        if (sourceCache == null) {
-            sourceCache = Sources.load();
+        if (_sourceCache == null) {
+            _sourceCache = Sources.load();
         }
 
-        return sourceCache;
+        return _sourceCache;
     }
 
     public static List<Version> installCache() {
-        if (installCache == null) {
-            installCache = Installed.load();
+        if (_installCache == null) {
+            _installCache = Installed.load();
         }
 
-        return installCache;
+        return _installCache;
     }
 
 }

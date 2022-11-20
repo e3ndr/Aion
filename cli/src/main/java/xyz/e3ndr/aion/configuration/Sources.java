@@ -38,7 +38,7 @@ public class Sources {
                     Files.readAllBytes(FILE.toPath()),
                     StandardCharsets.UTF_8
                 );
-                return Rson.DEFAULT.fromJson(content, AionSourceList.TT_SOURCE_LIST);
+                return Rson.DEFAULT.fromJson(content, AionSourceList.TT_LIST);
             } catch (IOException e) {
                 Bootstrap.LOGGER.fatal("Unable to parse sources cache:\n%s", e);
                 System.exit(1);

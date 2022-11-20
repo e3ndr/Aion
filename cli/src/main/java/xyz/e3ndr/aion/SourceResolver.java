@@ -39,7 +39,7 @@ public class SourceResolver {
     }
 
     private static List<AionPackage> resolveAdditionalPackages(String baseUrl, String file) throws IOException {
-        return HttpUtil.get(baseUrl + file, AionPackage.TT_PACKAGE_LIST);
+        return HttpUtil.get(baseUrl + file, AionPackage.TT_LIST);
     }
 
 }

@@ -24,7 +24,7 @@ import lombok.Getter;
 @Getter
 @JsonClass(exposeAll = true)
 public class AionPackage {
-    public static final TypeToken<List<AionPackage>> TT_PACKAGE_LIST = new TypeToken<List<AionPackage>>() {
+    public static final TypeToken<List<AionPackage>> TT_LIST = new TypeToken<List<AionPackage>>() {
     };
 
     private String slug;

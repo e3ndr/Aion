@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @JsonClass(exposeAll = true)
 public class AionSourceList {
-    public static final TypeToken<List<AionSourceList>> TT_SOURCE_LIST = new TypeToken<List<AionSourceList>>() {
+    public static final TypeToken<List<AionSourceList>> TT_LIST = new TypeToken<List<AionSourceList>>() {
     };
 
     private String name;

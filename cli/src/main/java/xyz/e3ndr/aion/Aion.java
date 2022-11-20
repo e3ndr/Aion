@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import co.casterlabs.commons.async.AsyncTask;
+import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Sources;
@@ -34,6 +35,8 @@ public class Aion {
         DOWNLOAD_DIR.mkdirs();
         PACKAGES_DIR.mkdirs();
         PATH_DIR.mkdirs();
+
+        IOUtil.DEFAULT_BUFFER_SIZE = 1024; // 1kb
 
         // Add AION to the local path.
         AsyncTask.createNonDaemon(() -> {

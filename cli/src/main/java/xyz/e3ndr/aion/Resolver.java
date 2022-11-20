@@ -45,8 +45,7 @@ public class Resolver {
         Aion.LOGGER.trace("Requesting from scheme: %s", scheme);
         switch (scheme) {
             case "file": {
-                File file = new File(uri.getPath());
-
+                File file = new File(location.substring("file://".length()));
                 return new FileInputStream(file);
             }
 

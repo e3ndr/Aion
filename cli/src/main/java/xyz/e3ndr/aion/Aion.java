@@ -67,6 +67,37 @@ public class Aion {
 
     }
 
+    public static void updatePath(String pkg, String version, String command) {
+        AsyncTask.createNonDaemon(() -> {
+            try {
+                String unixExecutable = Resolver.getString("resource:///path/exec_format");
+                String windowsExecutable = Resolver.getString("resource:///path/exec_format.bat");
+
+                unixExecutable = unixExecutable
+                    .replace("{package}", pkg)
+                    .replace("{version}", version)
+                    .replace("{command}", command);
+                windowsExecutable = windowsExecutable
+                    .replace("{package}", pkg)
+                    .replace("{version}", version)
+                    .replace("{command}", command + ".bat");
+
+                Files.write(
+                    new File(PATH_DIR, command)
+                        .toPath(),
+                    unixExecutable.getBytes()
+                );
+                Files.write(
+                    new File(PATH_DIR, command + ".bat")
+                        .toPath(),
+                    windowsExecutable.getBytes()
+                );
+            } catch (IOException e) {
+                LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
+            }
+        });
+    }
+
     // Getters, we want to load these things on-demand.
 
     public static Config config() {

@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import xyz.e3ndr.aion.Bootstrap;
+import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.Util;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.types.AionPackage;
@@ -41,42 +41,42 @@ public class CommandInstall implements Runnable {
         }
 
         // Look for the packages in the source cache.
-        Bootstrap.LOGGER.info("Looking for packages...");
-        List<AionPackage.Version> packages = findPackages(packagesToFind, Bootstrap.getInstallCache()); // There's a comment below referring to this line.
+        Aion.LOGGER.info("Looking for packages...");
+        List<AionPackage.Version> packages = findPackages(packagesToFind, Aion.getInstallCache()); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
-        Bootstrap.LOGGER.info("The following packages will be installed:");
+        Aion.LOGGER.info("The following packages will be installed:");
         for (AionPackage.Version version : packages) {
-            Bootstrap.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
+            Aion.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
         }
 
-        Bootstrap.LOGGER.info("Resolving dependencies...");
-        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(Bootstrap.getInstallCache(), packages));
+        Aion.LOGGER.info("Resolving dependencies...");
+        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(Aion.getInstallCache(), packages));
 
         List<AionPackage.Version> newInstallCache = new LinkedList<>();
-        newInstallCache.addAll(Bootstrap.getInstallCache());
+        newInstallCache.addAll(Aion.getInstallCache());
         newInstallCache.addAll(dependencies);
         newInstallCache.addAll(packages);
 
         if (dependencies.size() == 0) {
-            Bootstrap.LOGGER.info("No dependencies will be installed.");
+            Aion.LOGGER.info("No dependencies will be installed.");
         } else {
-            Bootstrap.LOGGER.info("The following dependencies will be installed:");
+            Aion.LOGGER.info("The following dependencies will be installed:");
             for (AionPackage.Version version : dependencies) {
-                Bootstrap.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
+                Aion.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
             }
         }
 
         // Print out the changes.
         int total = dependencies.size() + packages.size();
         if (total == 0) {
-            Bootstrap.LOGGER.info("No packages will be installed.");
+            Aion.LOGGER.info("No packages will be installed.");
             return;
         }
 
-        Bootstrap.LOGGER.info("A total of %d package(s) will be installed.", total);
+        Aion.LOGGER.info("A total of %d package(s) will be installed.", total);
 
-        Bootstrap.LOGGER.info("Checking for conflicts...");
+        Aion.LOGGER.info("Checking for conflicts...");
         boolean didConflict = false;
 
         // Figure out if any packages have conflicts.
@@ -90,7 +90,7 @@ public class CommandInstall implements Runnable {
 
                 if (found) {
                     didConflict = true;
-                    Bootstrap.LOGGER.info("    Package %s:%s conflicts with %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
+                    Aion.LOGGER.info("    Package %s:%s conflicts with %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
                 }
             }
         }
@@ -106,13 +106,13 @@ public class CommandInstall implements Runnable {
 
                 if (found) {
                     didConflict = true;
-                    Bootstrap.LOGGER.info("    Dependency %s:%s conflicts with %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
+                    Aion.LOGGER.info("    Dependency %s:%s conflicts with %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
                 }
             }
         }
 
         // Figure out if any EXISTING packages have conflicts with any PACKAGES.
-        for (AionPackage.Version pkg : Bootstrap.getInstallCache()) {
+        for (AionPackage.Version pkg : Aion.getInstallCache()) {
             for (String interim_conflict : pkg.getConflicts()) {
                 Pair<String, String> conflict = parseVersion(interim_conflict);
 
@@ -122,13 +122,13 @@ public class CommandInstall implements Runnable {
 
                 if (found) {
                     didConflict = true;
-                    Bootstrap.LOGGER.info("    Installed package %s:%s conflicts with package %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
+                    Aion.LOGGER.info("    Installed package %s:%s conflicts with package %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
                 }
             }
         }
 
         // Figure out if any EXISTING packages have conflicts with any DEPENDENCIES.
-        for (AionPackage.Version pkg : Bootstrap.getInstallCache()) {
+        for (AionPackage.Version pkg : Aion.getInstallCache()) {
             for (String interim_conflict : pkg.getConflicts()) {
                 Pair<String, String> conflict = parseVersion(interim_conflict);
 
@@ -138,25 +138,25 @@ public class CommandInstall implements Runnable {
 
                 if (found) {
                     didConflict = true;
-                    Bootstrap.LOGGER.info("    Installed package %s:%s conflicts with dependency %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
+                    Aion.LOGGER.info("    Installed package %s:%s conflicts with dependency %s:%s", pkg.getPackageSlug(), pkg.getVersion(), conflict.a(), conflict.b());
                 }
             }
         }
 
         if (didConflict) {
-            Bootstrap.LOGGER.info("No packages will be installed, resolve conflicts to proceed.");
+            Aion.LOGGER.info("No packages will be installed, resolve conflicts to proceed.");
             return;
         } else {
-            Bootstrap.LOGGER.info("No conflicts found.");
+            Aion.LOGGER.info("No conflicts found.");
         }
 
         // Dry run
         if (this.isDryRun) {
-            Bootstrap.LOGGER.info("----End of dry run----");
+            Aion.LOGGER.info("----End of dry run----");
             return;
         }
 
-        Bootstrap.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
+        Aion.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
         // TODO
 
         Installed.save(newInstallCache);
@@ -201,13 +201,13 @@ public class CommandInstall implements Runnable {
                     .anyMatch((v) -> v.getPackageSlug().equals(slug) && v.getVersion().equals(version));
 
                 if (alreadyHas) {
-                    if ($alreadyHave == Bootstrap.getInstallCache()) {
+                    if ($alreadyHave == Aion.getInstallCache()) {
                         // We want to change the this message if we're in dependency resolution.
                         // We know if we're in dependency resolution because during the first iteration,
                         // $alreadyHave will be the installCache. Scroll up to see the impl.
-                        Bootstrap.LOGGER.info("    %s:%s is already installed, did you mean `update`?", slug, version);
+                        Aion.LOGGER.info("    %s:%s is already installed, did you mean `update`?", slug, version);
                     } else {
-                        Bootstrap.LOGGER.info("    Dependency %s:%s is already installed.", slug, version);
+                        Aion.LOGGER.info("    Dependency %s:%s is already installed.", slug, version);
                     }
                 }
 
@@ -216,9 +216,9 @@ public class CommandInstall implements Runnable {
             .filter((entry) -> {
                 String slug = entry.a();
                 String version = entry.b();
-//                Bootstrap.LOGGER.debug("    Looking for package: %s:%s", slug, version);
+//                Aion.LOGGER.debug("    Looking for package: %s:%s", slug, version);
 
-                for (AionSourceList sourcelist : Bootstrap.getSourceCache()) {
+                for (AionSourceList sourcelist : Aion.getSourceCache()) {
                     AionPackage.Version v = sourcelist.findPackage(slug, version);
                     if (v == null) continue; // Next source.
 
@@ -233,9 +233,9 @@ public class CommandInstall implements Runnable {
 
         // Couldn't find some packages, abort.
         if (!packagesNotFound.isEmpty()) {
-            Bootstrap.LOGGER.info("Could not find the following packages:");
+            Aion.LOGGER.info("Could not find the following packages:");
             for (Pair<String, String> entry : packagesNotFound) {
-                Bootstrap.LOGGER.info("    %s:%s", entry.a(), entry.b());
+                Aion.LOGGER.info("    %s:%s", entry.a(), entry.b());
             }
             return null;
         }

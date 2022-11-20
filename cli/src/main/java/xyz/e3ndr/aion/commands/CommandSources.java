@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
-import xyz.e3ndr.aion.Bootstrap;
+import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.SourceResolver;
 import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesAdd;
 import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRefresh;
@@ -31,21 +31,21 @@ public class CommandSources implements Runnable {
 
     @Override
     public void run() {
-        if (Bootstrap.getSourceCache().isEmpty()) {
-            Bootstrap.LOGGER.info("No sources configured.");
+        if (Aion.getSourceCache().isEmpty()) {
+            Aion.LOGGER.info("No sources configured.");
             return;
         }
 
-        Bootstrap.LOGGER.info("Sources:");
-        for (AionSourceList sourcelist : Bootstrap.getSourceCache()) {
-            Bootstrap.LOGGER.info("    %s (%s)", sourcelist.getName(), sourcelist.getUrl());
+        Aion.LOGGER.info("Sources:");
+        for (AionSourceList sourcelist : Aion.getSourceCache()) {
+            Aion.LOGGER.info("    %s (%s)", sourcelist.getName(), sourcelist.getUrl());
         }
     }
 
     public static Integer refresh() throws Exception {
-        Bootstrap.LOGGER.info("Refreshing source cache, this may take some time.");
+        Aion.LOGGER.info("Refreshing source cache, this may take some time.");
 
-        List<AionSourceList> sourcelists = Bootstrap
+        List<AionSourceList> sourcelists = Aion
             .getConfig()
             .getSources()
             .parallelStream()
@@ -53,7 +53,7 @@ public class CommandSources implements Runnable {
                 try {
                     return SourceResolver.resolve(url);
                 } catch (IOException e) {
-                    Bootstrap.LOGGER.fatal("An error occurred whilst grabbing sourcelist:\n%s", e);
+                    Aion.LOGGER.fatal("An error occurred whilst grabbing sourcelist:\n%s", e);
                     try {
                         Thread.sleep(500); // Try to allow FLF to flush.
                     } catch (InterruptedException e1) {}
@@ -77,26 +77,26 @@ public class CommandSources implements Runnable {
         @SneakyThrows
         @Override
         public void run() {
-            List<String> sources = Bootstrap.getConfig().getSources();
+            List<String> sources = Aion.getConfig().getSources();
             int count = 0;
 
             for (String toAdd : this.sourcesToAdd) {
                 if (sources.contains(toAdd)) {
-                    Bootstrap.LOGGER.warn("%s is already in the source list, ignoring.", toAdd);
+                    Aion.LOGGER.warn("%s is already in the source list, ignoring.", toAdd);
                     continue;
                 }
 
                 count++;
                 sources.add(toAdd);
-                Bootstrap.LOGGER.info("Added %s.", toAdd);
+                Aion.LOGGER.info("Added %s.", toAdd);
             }
 
             if (count == 0) {
-                Bootstrap.LOGGER.info("No sources added.");
+                Aion.LOGGER.info("No sources added.");
                 return;
             } else {
-                Bootstrap.getConfig().save();
-                Bootstrap.LOGGER.info(""); // Newline.
+                Aion.getConfig().save();
+                Aion.LOGGER.info(""); // Newline.
                 refresh();
             }
         }
@@ -112,7 +112,7 @@ public class CommandSources implements Runnable {
         @SneakyThrows
         @Override
         public void run() {
-            List<String> sources = Bootstrap.getConfig().getSources();
+            List<String> sources = Aion.getConfig().getSources();
             int count = 0;
 
             for (String toRemove : this.sourcesToRemove) {
@@ -120,18 +120,18 @@ public class CommandSources implements Runnable {
 
                 if (removed) {
                     count++;
-                    Bootstrap.LOGGER.info("Removed %s.", toRemove);
+                    Aion.LOGGER.info("Removed %s.", toRemove);
                 } else {
-                    Bootstrap.LOGGER.warn("%s is not in the source list, ignoring.", toRemove);
+                    Aion.LOGGER.warn("%s is not in the source list, ignoring.", toRemove);
                 }
             }
 
             if (count == 0) {
-                Bootstrap.LOGGER.info("No sources removed.");
+                Aion.LOGGER.info("No sources removed.");
                 return;
             } else {
-                Bootstrap.getConfig().save();
-                Bootstrap.LOGGER.info(""); // Newline.
+                Aion.getConfig().save();
+                Aion.LOGGER.info(""); // Newline.
                 refresh();
             }
         }

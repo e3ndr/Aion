@@ -9,7 +9,7 @@ import xyz.e3ndr.aion.types.AionSourceList;
 public class SourceResolver {
 
     public static AionSourceList resolve(String url) throws IOException {
-        Bootstrap.LOGGER.debug("Fetching sourcelist: %s", url);
+        Aion.LOGGER.debug("Fetching sourcelist: %s", url);
         return resolveAdditionalSource(url, "/sourcelist.json");
     }
 
@@ -18,18 +18,18 @@ public class SourceResolver {
         AionSourceList sourcelist = HttpUtil.get(baseUrl + file, AionSourceList.class);
 
         for (String additionalPackageList : sourcelist.getAdditionalPackages()) {
-            Bootstrap.LOGGER.debug("Fetching additional packagelist: %s%s", baseUrl, additionalPackageList);
+            Aion.LOGGER.debug("Fetching additional packagelist: %s%s", baseUrl, additionalPackageList);
             List<AionPackage> add = resolveAdditionalPackages(baseUrl, additionalPackageList);
 
-            Bootstrap.LOGGER.debug("Additional packagelist had %d packages.", add.size());
+            Aion.LOGGER.debug("Additional packagelist had %d packages.", add.size());
             sourcelist.getPackageList().addAll(add);
         }
 
         for (String additionalSourceList : sourcelist.getAdditionalSources()) {
-            Bootstrap.LOGGER.debug("Fetching additional sourcelist: %s%s", baseUrl, additionalSourceList);
+            Aion.LOGGER.debug("Fetching additional sourcelist: %s%s", baseUrl, additionalSourceList);
             List<AionPackage> add = resolveAdditionalSource(baseUrl, additionalSourceList).getPackageList();
 
-            Bootstrap.LOGGER.debug("Additional sourcelist had %s packages.", add.size());
+            Aion.LOGGER.debug("Additional sourcelist had %s packages.", add.size());
             sourcelist.getPackageList().addAll(add);
         }
 

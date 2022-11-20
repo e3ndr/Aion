@@ -31,7 +31,7 @@ public class HttpUtil {
             File file = new File(url);
             String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 
-            Bootstrap.LOGGER.trace("File %s:\n%s", url, content);
+            Aion.LOGGER.trace("File %s:\n%s", url, content);
             return content;
         }
 
@@ -41,7 +41,7 @@ public class HttpUtil {
                 .build()
         ).execute()) {
             String body = response.body().string();
-            Bootstrap.LOGGER.trace("Response from %s:\n%s", url, body);
+            Aion.LOGGER.trace("Response from %s:\n%s", url, body);
             return body;
         }
     }

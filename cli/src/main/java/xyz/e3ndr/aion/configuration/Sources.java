@@ -10,7 +10,7 @@ import java.util.List;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
-import xyz.e3ndr.aion.Bootstrap;
+import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.types.AionSourceList;
 
 @Getter
@@ -24,9 +24,9 @@ public class Sources {
                 FILE.toPath(),
                 Rson.DEFAULT.toJsonString(sourcesCache).getBytes(StandardCharsets.UTF_8)
             );
-            Bootstrap.LOGGER.info("Updated sources cache.");
+            Aion.LOGGER.info("Updated sources cache.");
         } catch (IOException e) {
-            Bootstrap.LOGGER.fatal("Unable to save sources cache:\n%s", e.getMessage());
+            Aion.LOGGER.fatal("Unable to save sources cache:\n%s", e.getMessage());
             System.exit(1);
         }
     }
@@ -40,7 +40,7 @@ public class Sources {
                 );
                 return Rson.DEFAULT.fromJson(content, AionSourceList.TT_LIST);
             } catch (IOException e) {
-                Bootstrap.LOGGER.fatal("Unable to parse sources cache:\n%s", e);
+                Aion.LOGGER.fatal("Unable to parse sources cache:\n%s", e);
                 System.exit(1);
                 return null; // Compilier.
             }

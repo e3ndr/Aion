@@ -12,7 +12,7 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.validation.JsonValidate;
 import lombok.Getter;
-import xyz.e3ndr.aion.Bootstrap;
+import xyz.e3ndr.aion.Aion;
 
 @Getter
 @JsonClass(exposeAll = true)
@@ -24,7 +24,7 @@ public class Config {
     @JsonValidate
     private void $validate() {
         if (this.sources == null) {
-            Bootstrap.LOGGER.debug("Configured sources is null, setting to default.");
+            Aion.LOGGER.debug("Configured sources is null, setting to default.");
             this.sources = new LinkedList<>(Arrays.asList("test///"));
         }
     }
@@ -35,9 +35,9 @@ public class Config {
                 FILE.toPath(),
                 Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
             );
-            Bootstrap.LOGGER.debug("Updated config.");
+            Aion.LOGGER.debug("Updated config.");
         } catch (IOException e) {
-            Bootstrap.LOGGER.severe("Unable to save config, changes/settings will NOT persist.\n%s", e.getMessage());
+            Aion.LOGGER.severe("Unable to save config, changes/settings will NOT persist.\n%s", e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class Config {
                 );
                 return Rson.DEFAULT.fromJson(content, Config.class);
             } catch (IOException e) {
-                Bootstrap.LOGGER.fatal("Unable to parse config file:\n%s", e);
+                Aion.LOGGER.fatal("Unable to parse config file:\n%s", e);
                 System.exit(1);
                 return null; // Compilier.
             }

@@ -25,13 +25,16 @@ public class Resolver {
     /* -------------------- */
 
     public static <T> T get(String location, Class<T> expected) throws IOException {
-        return get(location, TypeToken.of(expected));
+        return Rson.DEFAULT.fromJson(getString(location), expected);
     }
 
     public static <T> T get(String location, TypeToken<T> expected) throws IOException {
+        return Rson.DEFAULT.fromJson(getString(location), expected);
+    }
+
+    public static String getString(String location) throws IOException {
         try (InputStream in = get(location)) {
-            String json = IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
-            return Rson.DEFAULT.fromJson(json, expected);
+            return IOUtil.readInputStreamString(in, StandardCharsets.UTF_8);
         }
     }
 
@@ -60,6 +63,10 @@ public class Resolver {
                 ).execute()) {
                     return response.body().byteStream();
                 }
+            }
+
+            case "resource": {
+                return Aion.class.getResourceAsStream(uri.getPath());
             }
 
             case "ftp":

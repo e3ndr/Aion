@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+pathDir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+baseDir="$pathDir/.."
+
+$baseDir\runtime\bin\java -jar $baseDir\aion.jar $@

@@ -1,8 +1,11 @@
 package xyz.e3ndr.aion;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
+import co.casterlabs.commons.async.AsyncTask;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Sources;
@@ -38,6 +41,29 @@ public class Aion {
                 file.delete();
             }
         }
+
+        // Add AION to the local path.
+        AsyncTask.createNonDaemon(() -> {
+            try {
+                Files.write(
+                    new File(PATH_DIR, "aion")
+                        .toPath(),
+                    Resolver
+                        .getString("resource:///path/aion")
+                        .getBytes()
+                );
+
+                Files.write(
+                    new File(PATH_DIR, "aion.bat")
+                        .toPath(),
+                    Resolver
+                        .getString("resource:///path/aion.bat")
+                        .getBytes()
+                );
+            } catch (IOException e) {
+                LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
+            }
+        });
 
     }
 

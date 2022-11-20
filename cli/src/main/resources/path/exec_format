@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+pathDir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+baseDir=$pathDir/..
+packagesDir=$baseDir/packages
+
+export AION_BASE_DIR=$baseDir
+
+{package}/{version}/{commands}/{command} $@

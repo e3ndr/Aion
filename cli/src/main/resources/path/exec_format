@@ -6,4 +6,4 @@ packagesDir=$baseDir/packages
 
 export AION_BASE_DIR=$baseDir
 
-$packagesDir/{package}/{version}/{commands}/{command} $@
+$packagesDir/{package}/{version}/commands/{command} $@

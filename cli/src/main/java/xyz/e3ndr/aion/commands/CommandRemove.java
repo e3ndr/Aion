@@ -10,7 +10,7 @@ public class CommandRemove implements Runnable {
     @Option(names = {
             "-d",
             "--dry"
-    }, description = "Performs a dry run (no files will be modified.)")
+    }, description = "Performs a dry run (no files will be modified).")
     private boolean isDryRun = false;
 
     @Parameters(arity = "1..*", description = "The list of packages to remove.", paramLabel = "PACKAGE:VERSION")

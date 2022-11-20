@@ -16,7 +16,7 @@ public class CommandRun implements Runnable {
     @Option(names = {
             "-p",
             "--package"
-    }, description = "Specifies a package to be placed on the command's path during execution.", paramLabel = "PACKAGE[:VERSION]")
+    }, description = "Specifies a package to be placed on the command's path during execution. Ommiting version will use the latest available.", paramLabel = "PACKAGE[:VERSION]")
     private String[] interim_packagesToUse = {};
 
     @Parameters(arity = "1..*", description = "The command to run.", paramLabel = "COMMAND")

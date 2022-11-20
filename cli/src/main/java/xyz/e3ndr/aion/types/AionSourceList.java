@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.rakurai.json.TypeToken;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
+import co.casterlabs.rakurai.json.validation.JsonValidate;
 import lombok.Getter;
 import xyz.e3ndr.aion.types.AionPackage.Version;
 
@@ -24,6 +25,13 @@ public class AionSourceList {
     private String[] additionalPackages;
 
     private List<AionPackage> packageList = new LinkedList<>();
+
+    @JsonValidate
+    private void $validate() {
+        for (AionPackage entry : packageList) {
+            entry.sourcelist = this;
+        }
+    }
 
     public @Nullable AionPackage.Version findPackage(String slug, String version) {
         Optional<Version> result = this.packageList.parallelStream()

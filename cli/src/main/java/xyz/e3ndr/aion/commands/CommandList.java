@@ -18,7 +18,7 @@ public class CommandList implements Runnable {
 
         Aion.LOGGER.info("Packages:");
         for (AionPackage.Version version : Aion.installCache()) {
-            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPackageSlug(), version.getVersion(), version.getPatch(), version.getPackageAliases());
+            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
         }
     }
 

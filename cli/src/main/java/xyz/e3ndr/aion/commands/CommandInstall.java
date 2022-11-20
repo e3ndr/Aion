@@ -47,7 +47,7 @@ public class CommandInstall implements Runnable {
 
         Aion.LOGGER.info("The following packages will be installed:");
         for (AionPackage.Version version : packages) {
-            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPackageSlug(), version.getVersion(), version.getPatch(), version.getPackageAliases());
+            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
         }
 
         Aion.LOGGER.info("Resolving dependencies...");
@@ -63,7 +63,7 @@ public class CommandInstall implements Runnable {
         } else {
             Aion.LOGGER.info("The following dependencies will be installed:");
             for (AionPackage.Version version : dependencies) {
-                Aion.LOGGER.info("    %s:%s (%s) %s", version.getPackageSlug(), version.getVersion(), version.getPatch(), version.getPackageAliases());
+                Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
             }
         }
 
@@ -124,7 +124,7 @@ public class CommandInstall implements Runnable {
 
                 boolean alreadyHas = $alreadyHave
                     .parallelStream()
-                    .anyMatch((v) -> v.getPackageSlug().equals(slug) && v.getVersion().equals(version));
+                    .anyMatch((v) -> v.getPkg().getSlug().equals(slug) && v.getVersion().equals(version));
 
                 if (alreadyHas) {
                     if ($alreadyHave == Aion.installCache()) {

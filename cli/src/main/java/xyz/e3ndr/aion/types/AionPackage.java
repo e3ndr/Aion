@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jetbrains.annotations.Nullable;
+
 import co.casterlabs.commons.platform.Arch;
 import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.rakurai.json.Rson;
@@ -27,6 +29,9 @@ public class AionPackage {
     public static final TypeToken<List<AionPackage>> TT_LIST = new TypeToken<List<AionPackage>>() {
     };
 
+    @JsonExclude
+    AionSourceList sourcelist;
+
     private String slug;
     private List<String> aliases = Collections.emptyList();
     private String latest;
@@ -43,8 +48,7 @@ public class AionPackage {
         for (Map.Entry<String, Version> entry : this.versions.entrySet()) {
             Version version = entry.getValue();
             version.version = entry.getKey();
-            version.packageSlug = this.slug;
-            version.packageAliases = this.aliases;
+            version.pkg = this;
         }
     }
 
@@ -54,8 +58,7 @@ public class AionPackage {
         public static final TypeToken<List<Version>> TT_LIST = new TypeToken<List<Version>>() {
         };
 
-        private String packageSlug;
-        private List<String> packageAliases;
+        private @JsonExclude AionPackage pkg;
 
         private String version;
         private String patch;
@@ -77,6 +80,12 @@ public class AionPackage {
             private String base = "";
             private String[] keep = null;
             private String[] discard = {};
+        }
+
+        public @Nullable String getBinaryLocation(Arch arch, OSDistribution dist) {
+            return this.binaries
+                .getOrDefault(arch, Collections.emptyMap())
+                .get(dist);
         }
 
         // Rakurai patches

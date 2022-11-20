@@ -2,7 +2,7 @@ package xyz.e3ndr.aion.archive;
 
 import java.io.File;
 
-import xyz.e3ndr.aion.types.AionPackage.Version.ExtractionPlan;
+import xyz.e3ndr.aion.types.ExtractionPlan;
 
 class TarGzipExtractor implements Archives.Extractor {
 

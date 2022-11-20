@@ -6,7 +6,7 @@ import java.net.URI;
 import org.jetbrains.annotations.Nullable;
 
 import lombok.AllArgsConstructor;
-import xyz.e3ndr.aion.types.AionPackage;
+import xyz.e3ndr.aion.types.ExtractionPlan;
 
 public class Archives {
 

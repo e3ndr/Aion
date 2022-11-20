@@ -74,14 +74,6 @@ public class AionPackage {
         @JsonField("extract")
         private ExtractionPlan extractionPlan;
 
-        @Getter
-        @JsonClass(exposeAll = true)
-        public static class ExtractionPlan {
-            private String base = "";
-            private String[] keep = null;
-            private String[] discard = {};
-        }
-
         public @Nullable String getBinaryLocation(Arch arch, OSDistribution dist) {
             return this.binaries
                 .getOrDefault(arch, Collections.emptyMap())

@@ -17,11 +17,13 @@ public class Aion {
     private static List<AionSourceList> sourceCache;
     private static List<AionPackage.Version> installCache;
 
-    public static void setup() {}
+    public static void setup() {
+        // :^)
+    }
 
     // Getters, we want to load these things on-demand.
 
-    public static Config getConfig() {
+    public static Config config() {
         if (config == null) {
             config = Config.load();
         }
@@ -29,7 +31,7 @@ public class Aion {
         return config;
     }
 
-    public static List<AionSourceList> getSourceCache() {
+    public static List<AionSourceList> sourceCache() {
         if (sourceCache == null) {
             sourceCache = Sources.load();
         }
@@ -37,7 +39,7 @@ public class Aion {
         return sourceCache;
     }
 
-    public static List<Version> getInstallCache() {
+    public static List<Version> installCache() {
         if (installCache == null) {
             installCache = Installed.load();
         }

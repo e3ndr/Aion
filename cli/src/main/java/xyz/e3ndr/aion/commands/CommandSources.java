@@ -31,13 +31,13 @@ public class CommandSources implements Runnable {
 
     @Override
     public void run() {
-        if (Aion.getSourceCache().isEmpty()) {
+        if (Aion.sourceCache().isEmpty()) {
             Aion.LOGGER.info("No sources configured.");
             return;
         }
 
         Aion.LOGGER.info("Sources:");
-        for (AionSourceList sourcelist : Aion.getSourceCache()) {
+        for (AionSourceList sourcelist : Aion.sourceCache()) {
             Aion.LOGGER.info("    %s (%s)", sourcelist.getName(), sourcelist.getUrl());
         }
     }
@@ -46,7 +46,7 @@ public class CommandSources implements Runnable {
         Aion.LOGGER.info("Refreshing source cache, this may take some time.");
 
         List<AionSourceList> sourcelists = Aion
-            .getConfig()
+            .config()
             .getSources()
             .parallelStream()
             .map((url) -> {
@@ -77,7 +77,7 @@ public class CommandSources implements Runnable {
         @SneakyThrows
         @Override
         public void run() {
-            List<String> sources = Aion.getConfig().getSources();
+            List<String> sources = Aion.config().getSources();
             int count = 0;
 
             for (String toAdd : this.sourcesToAdd) {
@@ -95,7 +95,7 @@ public class CommandSources implements Runnable {
                 Aion.LOGGER.info("No sources added.");
                 return;
             } else {
-                Aion.getConfig().save();
+                Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
                 refresh();
             }
@@ -112,7 +112,7 @@ public class CommandSources implements Runnable {
         @SneakyThrows
         @Override
         public void run() {
-            List<String> sources = Aion.getConfig().getSources();
+            List<String> sources = Aion.config().getSources();
             int count = 0;
 
             for (String toRemove : this.sourcesToRemove) {
@@ -130,7 +130,7 @@ public class CommandSources implements Runnable {
                 Aion.LOGGER.info("No sources removed.");
                 return;
             } else {
-                Aion.getConfig().save();
+                Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
                 refresh();
             }

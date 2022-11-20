@@ -42,7 +42,7 @@ public class CommandInstall implements Runnable {
 
         // Look for the packages in the source cache.
         Aion.LOGGER.info("Looking for packages...");
-        List<AionPackage.Version> packages = findPackages(packagesToFind, Aion.getInstallCache()); // There's a comment below referring to this line.
+        List<AionPackage.Version> packages = findPackages(packagesToFind, Aion.installCache()); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
         Aion.LOGGER.info("The following packages will be installed:");
@@ -51,10 +51,10 @@ public class CommandInstall implements Runnable {
         }
 
         Aion.LOGGER.info("Resolving dependencies...");
-        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(Aion.getInstallCache(), packages));
+        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(Aion.installCache(), packages));
 
         List<AionPackage.Version> newInstallCache = new LinkedList<>();
-        newInstallCache.addAll(Aion.getInstallCache());
+        newInstallCache.addAll(Aion.installCache());
         newInstallCache.addAll(dependencies);
         newInstallCache.addAll(packages);
 
@@ -112,7 +112,7 @@ public class CommandInstall implements Runnable {
         }
 
         // Figure out if any EXISTING packages have conflicts with any PACKAGES.
-        for (AionPackage.Version pkg : Aion.getInstallCache()) {
+        for (AionPackage.Version pkg : Aion.installCache()) {
             for (String interim_conflict : pkg.getConflicts()) {
                 Pair<String, String> conflict = parseVersion(interim_conflict);
 
@@ -128,7 +128,7 @@ public class CommandInstall implements Runnable {
         }
 
         // Figure out if any EXISTING packages have conflicts with any DEPENDENCIES.
-        for (AionPackage.Version pkg : Aion.getInstallCache()) {
+        for (AionPackage.Version pkg : Aion.installCache()) {
             for (String interim_conflict : pkg.getConflicts()) {
                 Pair<String, String> conflict = parseVersion(interim_conflict);
 
@@ -201,7 +201,7 @@ public class CommandInstall implements Runnable {
                     .anyMatch((v) -> v.getPackageSlug().equals(slug) && v.getVersion().equals(version));
 
                 if (alreadyHas) {
-                    if ($alreadyHave == Aion.getInstallCache()) {
+                    if ($alreadyHave == Aion.installCache()) {
                         // We want to change the this message if we're in dependency resolution.
                         // We know if we're in dependency resolution because during the first iteration,
                         // $alreadyHave will be the installCache. Scroll up to see the impl.
@@ -218,7 +218,7 @@ public class CommandInstall implements Runnable {
                 String version = entry.b();
 //                Aion.LOGGER.debug("    Looking for package: %s:%s", slug, version);
 
-                for (AionSourceList sourcelist : Aion.getSourceCache()) {
+                for (AionSourceList sourcelist : Aion.sourceCache()) {
                     AionPackage.Version v = sourcelist.findPackage(slug, version);
                     if (v == null) continue; // Next source.
 

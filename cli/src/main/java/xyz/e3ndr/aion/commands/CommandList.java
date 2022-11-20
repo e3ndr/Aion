@@ -11,13 +11,13 @@ public class CommandList implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        if (Aion.getInstallCache().isEmpty()) {
+        if (Aion.installCache().isEmpty()) {
             Aion.LOGGER.info("No packages installed.");
             return;
         }
 
         Aion.LOGGER.info("Packages:");
-        for (AionPackage.Version version : Aion.getInstallCache()) {
+        for (AionPackage.Version version : Aion.installCache()) {
             Aion.LOGGER.info("    %s:%s (%s)", version.getPackageSlug(), version.getVersion(), version.getPatch());
         }
     }

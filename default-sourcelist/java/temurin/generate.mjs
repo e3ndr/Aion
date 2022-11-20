@@ -106,8 +106,8 @@ function parseReleaseInfo(json) {
         extract: {
           base: json.name, // Move into this sub-folder.
           keep: [
-            "/bin",
-            "/lib",
+            "/bin/.*",
+            "/lib/.*",
             "/ASSEMBLY_EXCEPTION",
             "/LICENSE",
             "/NOTICE",

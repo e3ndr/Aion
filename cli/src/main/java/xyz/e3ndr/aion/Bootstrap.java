@@ -10,7 +10,9 @@ import picocli.CommandLine.Option;
 import xyz.e3ndr.aion.commands.CommandInstall;
 import xyz.e3ndr.aion.commands.CommandSources;
 import xyz.e3ndr.aion.configuration.Config;
+import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Sources;
+import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionSourceList;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -23,6 +25,7 @@ public class Bootstrap {
 
     private static @Getter Config config;
     private static @Getter List<AionSourceList> sourceCache;
+    private static @Getter List<AionPackage> installCache;
 
     public static void main(String[] args) throws InterruptedException {
         FastLoggingFramework.setLogHandler(new LogHandler());
@@ -39,6 +42,7 @@ public class Bootstrap {
 
                 config = Config.load();
                 sourceCache = Sources.load();
+                installCache = Installed.load();
 
                 return new CommandLine.RunLast().execute(parseResult);
             })

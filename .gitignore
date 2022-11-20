@@ -13,3 +13,4 @@
 */Test.class
 cli/config.json
 cli/sources-cache.json
+cli/install-cache.json

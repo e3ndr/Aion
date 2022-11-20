@@ -1,6 +1,7 @@
 package xyz.e3ndr.aion.archive;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ public class Archives {
     }
 
     public static interface Extractor {
-        public void extract(File archive, File destDir, AionPackage.Version.ExtractionPlan plan);
+        public void extract(File archive, File destDir, ExtractionPlan plan) throws IOException;
     }
 
 }

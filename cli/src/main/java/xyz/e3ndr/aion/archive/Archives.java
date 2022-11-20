@@ -1,4 +1,4 @@
-package xyz.e3ndr.aion;
+package xyz.e3ndr.aion.archive;
 
 import java.io.File;
 import java.net.URI;
@@ -26,8 +26,8 @@ public class Archives {
 
     @AllArgsConstructor
     public static enum Format {
-        TAR_GZ(".zip", null),
-        ZIP(".tar.gz", null);
+        TAR_GZ(".zip", new ZipExtractor()),
+        ZIP(".tar.gz", new TarGzipExtractor());
 
         public final String extension;
         public final Extractor extractor;

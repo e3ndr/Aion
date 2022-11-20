@@ -13,6 +13,7 @@ import xyz.e3ndr.aion.commands.CommandPath;
 import xyz.e3ndr.aion.commands.CommandRemove;
 import xyz.e3ndr.aion.commands.CommandRun;
 import xyz.e3ndr.aion.commands.CommandSources;
+import xyz.e3ndr.aion.commands.CommandUpdate;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Sources;
@@ -66,7 +67,8 @@ public class Bootstrap {
             CommandPath.class,
             CommandRemove.class,
             CommandRun.class,
-            CommandSources.class
+            CommandSources.class,
+            CommandUpdate.class
         }
     )
     // @formatter:on

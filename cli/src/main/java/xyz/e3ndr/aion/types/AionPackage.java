@@ -38,11 +38,22 @@ public class AionPackage {
         // Get the LATEST version info, add it to the map. It's fine if this.latest
         // doesn't actually correspond to a version, we deal with it later.
         this.versions.put(this.latest, this.versions.get(this.latest));
+
+        for (Map.Entry<String, Version> entry : this.versions.entrySet()) {
+            Version version = entry.getValue();
+            version.version = entry.getKey();
+            version.packageSlug = this.slug;
+        }
     }
 
     @Getter
     @JsonClass(exposeAll = true)
     public static class Version {
+        public static final TypeToken<List<Version>> TT_LIST = new TypeToken<List<Version>>() {
+        };
+
+        private String packageSlug;
+        private String version;
         private String patch;
 
         private List<String> depends = Collections.emptyList();

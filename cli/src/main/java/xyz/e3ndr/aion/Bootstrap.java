@@ -25,7 +25,7 @@ public class Bootstrap {
 
     private static @Getter Config config;
     private static @Getter List<AionSourceList> sourceCache;
-    private static @Getter List<AionPackage> installCache;
+    private static @Getter List<AionPackage.Version> installCache;
 
     public static void main(String[] args) throws InterruptedException {
         FastLoggingFramework.setLogHandler(new LogHandler());

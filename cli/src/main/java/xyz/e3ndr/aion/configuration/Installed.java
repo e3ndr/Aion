@@ -18,7 +18,7 @@ import xyz.e3ndr.aion.types.AionPackage;
 public class Installed {
     private static final File FILE = new File("install-cache.json");
 
-    public static void save(List<AionPackage> installList) {
+    public static void save(List<AionPackage.Version> installList) {
         try {
             Files.write(
                 FILE.toPath(),
@@ -31,14 +31,14 @@ public class Installed {
         }
     }
 
-    public static List<AionPackage> load() {
+    public static List<AionPackage.Version> load() {
         if (FILE.exists()) {
             try {
                 String content = new String(
                     Files.readAllBytes(FILE.toPath()),
                     StandardCharsets.UTF_8
                 );
-                return Rson.DEFAULT.fromJson(content, AionPackage.TT_PACKAGE_LIST);
+                return Rson.DEFAULT.fromJson(content, AionPackage.Version.TT_LIST);
             } catch (IOException e) {
                 Bootstrap.LOGGER.fatal("Unable to parse install cache:\n%s", e);
                 System.exit(1);

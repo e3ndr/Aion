@@ -1,5 +1,7 @@
 package xyz.e3ndr.aion.commands;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,13 +10,16 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.commons.functional.tuples.Pair;
+import co.casterlabs.commons.platform.Platform;
+import co.casterlabs.rakurai.io.IOUtil;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
+import xyz.e3ndr.aion.Archives;
+import xyz.e3ndr.aion.Resolver;
 import xyz.e3ndr.aion.Util;
-import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
@@ -83,9 +88,55 @@ public class CommandInstall implements Runnable {
         }
 
         Aion.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
-        // TODO
 
-        Installed.save(newInstallCache);
+        // Download and install all the packages.
+        for (AionPackage.Version version : Util.concat(dependencies, packages)) {
+            String binaryLocation = version.getBinaryLocation(Platform.arch, Platform.osDistribution);
+            if (binaryLocation == null) {
+                Aion.LOGGER.fatal("Could not find a binary for %s (%s) for package %s:%s", Platform.osDistribution, Platform.arch, version.getPkg().getSlug(), version.getVersion());
+                return;
+            }
+
+            if (!binaryLocation.contains("://")) {
+                // Relative URLs needs to be modified.
+                binaryLocation = version.getPkg().getSourcelist().getUrl() + binaryLocation;
+            }
+
+            Archives.Format format = Archives.probeFormat(binaryLocation);
+            if (format == null) {
+                Aion.LOGGER.fatal("Unable to figure out archive format for: %s", binaryLocation);
+                return;
+            }
+
+            File downloadWorkingDir = new File(
+                Aion.DOWNLOAD_DIR,
+                String.format("%s-%s", version.getPkg().getSlug(), version.getVersion())
+            );
+            File downloadedFile = new File(downloadWorkingDir, "package" + format.extension);
+
+            if (downloadedFile.exists()) {
+                Aion.LOGGER.info("Package binary already exists locally, using that: %s", downloadedFile);
+            } else {
+                File tempFile = new File(downloadedFile.toString() + Aion.TEMP_FILE_EXT);
+                Aion.LOGGER.info("Downloading '%s' to '%s'", binaryLocation, tempFile);
+
+                IOUtil.writeInputStreamToOutputStream(Resolver.get(binaryLocation), new FileOutputStream(tempFile));
+
+                tempFile.renameTo(downloadedFile);
+                Aion.LOGGER.info("Downloaded '%s'", downloadedFile);
+            }
+
+            format.extractor.extract(downloadedFile, downloadWorkingDir, version.getExtractionPlan());
+            downloadedFile.delete();
+
+            // TODO move the files.
+            // TODO build the path executables.
+            // TODO update the path if another package isn't already managing it.
+
+            Util.recursivelyDeleteDirectory(downloadWorkingDir);
+        }
+
+//        Installed.save(newInstallCache);
 
         // TODO
     }

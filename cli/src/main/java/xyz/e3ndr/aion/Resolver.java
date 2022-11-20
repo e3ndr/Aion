@@ -13,7 +13,6 @@ import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.TypeToken;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionSourceList;
 
@@ -55,13 +54,15 @@ public class Resolver {
             }
 
             case "https": {
-                try (Response response = client.newCall(
-                    new Request.Builder()
-                        .url(uri.toString())
-                        .build()
-                ).execute()) {
-                    return response.body().byteStream();
-                }
+                return client
+                    .newCall(
+                        new Request.Builder()
+                            .url(uri.toString())
+                            .build()
+                    )
+                    .execute()
+                    .body()
+                    .byteStream();
             }
 
             case "resource": {

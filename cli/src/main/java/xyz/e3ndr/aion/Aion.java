@@ -35,13 +35,6 @@ public class Aion {
         PACKAGES_DIR.mkdirs();
         PATH_DIR.mkdirs();
 
-        // Clean out the download dir of any partial downloads.
-        for (File file : DOWNLOAD_DIR.listFiles()) {
-            if (file.getName().endsWith(TEMP_FILE_EXT)) {
-                file.delete();
-            }
-        }
-
         // Add AION to the local path.
         AsyncTask.createNonDaemon(() -> {
             try {

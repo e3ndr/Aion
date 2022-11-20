@@ -8,6 +8,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import xyz.e3ndr.aion.commands.CommandInstall;
+import xyz.e3ndr.aion.commands.CommandList;
 import xyz.e3ndr.aion.commands.CommandSources;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
@@ -58,6 +59,7 @@ public class Bootstrap {
         version = "1.0.0",
         subcommands = {
             CommandInstall.class,
+            CommandList.class,
             CommandSources.class
         }
     )

@@ -18,6 +18,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.Resolver;
+import xyz.e3ndr.aion.UserInput;
 import xyz.e3ndr.aion.Util;
 import xyz.e3ndr.aion.archive.Archives;
 import xyz.e3ndr.aion.types.AionPackage;
@@ -32,6 +33,12 @@ public class CommandInstall implements Runnable {
             "--dry"
     }, description = "Performs a dry run (no files will be modified).")
     private boolean isDryRun = false;
+
+    @Option(names = {
+            "-y",
+            "--yes"
+    }, description = "Automatically confirms the Yes/No prompt.")
+    private boolean autoYes = false;
 
     @Parameters(arity = "1..*", description = "The list of packages to install. Ommiting version will install the latest available.", paramLabel = "PACKAGE[:VERSION]")
     private String[] interim_packagesToInstall;
@@ -87,7 +94,14 @@ public class CommandInstall implements Runnable {
             return;
         }
 
-        Aion.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
+        if (!this.autoYes) {
+            Aion.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
+
+            if (!UserInput.confirm()) {
+                Aion.LOGGER.info("Aborting install.");
+                return;
+            }
+        }
 
         // Download and install all the packages.
         for (AionPackage.Version version : Util.concat(dependencies, packages)) {

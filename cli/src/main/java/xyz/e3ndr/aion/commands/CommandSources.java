@@ -71,7 +71,7 @@ public class CommandSources implements Runnable {
     @Command(name = "add", description = "Adds the specified sources.")
     public static class CommandSourcesAdd implements Runnable {
 
-        @Parameters(arity = "1..*", description = "The list of sources to add", paramLabel = "[URL]")
+        @Parameters(arity = "1..*", description = "The list of sources to add.", paramLabel = "[URL]")
         private String[] sourcesToAdd;
 
         @SneakyThrows
@@ -106,7 +106,7 @@ public class CommandSources implements Runnable {
     @Command(name = "remove", description = "Removes the specified sources.")
     public static class CommandSourcesRemove implements Runnable {
 
-        @Parameters(/*arity = "1..*", */description = "The list of sources to remove", paramLabel = "[URL]")
+        @Parameters(/*arity = "1..*", */description = "The list of sources to remove.", paramLabel = "[URL]")
         private String[] sourcesToRemove;
 
         @SneakyThrows

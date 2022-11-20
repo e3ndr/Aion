@@ -25,10 +25,10 @@ public class CommandInstall implements Runnable {
     @Option(names = {
             "-d",
             "--dry"
-    }, description = "Performs a dry run (no files will be modified)")
+    }, description = "Performs a dry run (no files will be modified.)")
     private boolean isDryRun = false;
 
-    @Parameters(arity = "1..*", description = "The list of packages to install", paramLabel = "PACKAGE[:VERSION]")
+    @Parameters(arity = "1..*", description = "The list of packages to install.", paramLabel = "PACKAGE[:VERSION]")
     private String[] interim_packagesToInstall;
 
     @SneakyThrows

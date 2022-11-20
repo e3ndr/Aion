@@ -1,15 +1,16 @@
 package xyz.e3ndr.aion;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.ExecutionException;
-import picocli.CommandLine.IExecutionStrategy;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.ParameterException;
-import picocli.CommandLine.ParseResult;
 import xyz.e3ndr.aion.commands.CommandInstall;
 import xyz.e3ndr.fastloggingframework.FastLoggingFramework;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
@@ -17,6 +18,9 @@ import xyz.e3ndr.fastloggingframework.logging.LogLevel;
 
 public class Bootstrap {
     public static final FastLogger LOGGER = new FastLogger("Aion");
+
+    private static final File CONFIG_FILE = new File("config.json");
+    private static final BaseCommand BASE = new BaseCommand();
 
     private static @Getter Config config = new Config();
 
@@ -29,20 +33,44 @@ public class Bootstrap {
             };
         }
 
-        int exitCode = new CommandLine(config)
-            .setExecutionStrategy(new IExecutionStrategy() {
-                @Override
-                public int execute(ParseResult parseResult) throws ExecutionException, ParameterException {
-                    config.setup(); // Intercept execution, do setup, then execute.
-                    return new CommandLine.RunLast().execute(parseResult);
-                }
+        if (CONFIG_FILE.exists()) {
+            try {
+                String content = new String(
+                    Files.readAllBytes(CONFIG_FILE.toPath()),
+                    StandardCharsets.UTF_8
+                );
+                config = Rson.DEFAULT.fromJson(content, Config.class);
+            } catch (IOException e) {
+                LOGGER.fatal("Unable to parse config file:\n%s", e);
+                System.exit(1);
+            }
+        }
+
+        new CommandLine(BASE)
+            .setExecutionStrategy((parseResult) -> {
+                BASE.setup(); // Intercept execution, do setup, then execute.
+                config.save();
+                return new CommandLine.RunLast().execute(parseResult);
             })
             .execute(args);
+    }
 
-//        if (exitCode != 0) {
-//            Thread.sleep(100); // Hack to allow FLF to flush.
-//            System.exit(1);
-//        }
+    @Getter
+    @JsonClass(exposeAll = true)
+    public static class Config {
+
+        public void save() {
+            try {
+                Files.write(
+                    CONFIG_FILE.toPath(),
+                    Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
+                );
+                LOGGER.debug("Updated config.");
+            } catch (IOException e) {
+                LOGGER.severe("Unable to save config, changes/settings will NOT persist.\n%s", e.getMessage());
+            }
+        }
+
     }
 
     // @formatter:off
@@ -57,7 +85,7 @@ public class Bootstrap {
         }
     )
     // @formatter:on
-    public static class Config implements Runnable {
+    public static class BaseCommand implements Runnable {
 
         @Option(names = {
                 "-vb",
@@ -77,8 +105,6 @@ public class Bootstrap {
         private void setup() {
             FastLoggingFramework.setColorEnabled(!this.noColor);
             LOGGER.setCurrentLevel(this.verbosity);
-
-            LOGGER.debug("Using config:\n%s", Rson.DEFAULT.toJson(this));
         }
 
     }

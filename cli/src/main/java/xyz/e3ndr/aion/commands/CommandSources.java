@@ -2,9 +2,9 @@ package xyz.e3ndr.aion.commands;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Bootstrap;
@@ -20,16 +20,14 @@ import xyz.e3ndr.aion.types.AionSourceList;
         CommandSourcesRemove.class,
         CommandSourcesRefresh.class
 })
-public class CommandSources implements Callable<Integer> {
+public class CommandSources implements Runnable {
 
     @Override
-    public Integer call() throws Exception {
+    public void run() {
         Bootstrap.LOGGER.info("Sources:");
         for (AionSourceList sourcelist : Bootstrap.getSourceCache()) {
             Bootstrap.LOGGER.info("    %s (%s)", sourcelist.getName(), sourcelist.getUrl());
         }
-
-        return 0;
     }
 
     public static Integer refresh() throws Exception {
@@ -59,13 +57,14 @@ public class CommandSources implements Callable<Integer> {
     }
 
     @Command(name = "add", description = "Adds the specified sources")
-    public static class CommandSourcesAdd implements Callable<Integer> {
+    public static class CommandSourcesAdd implements Runnable {
 
         @Parameters(arity = "1..*", description = "The list of sources to add", paramLabel = "[URL]")
         private String[] sourcesToAdd;
 
+        @SneakyThrows
         @Override
-        public Integer call() throws Exception {
+        public void run() {
             List<String> sources = Bootstrap.getConfig().getSources();
             int count = 0;
 
@@ -82,24 +81,25 @@ public class CommandSources implements Callable<Integer> {
 
             if (count == 0) {
                 Bootstrap.LOGGER.info("No sources added.");
-                return 0;
+                return;
             } else {
                 Bootstrap.getConfig().save();
                 Bootstrap.LOGGER.info(""); // Newline.
-                return refresh();
+                refresh();
             }
         }
 
     }
 
     @Command(name = "remove", description = "Removes the specified sources")
-    public static class CommandSourcesRemove implements Callable<Integer> {
+    public static class CommandSourcesRemove implements Runnable {
 
         @Parameters(/*arity = "1..*", */description = "The list of sources to remove", paramLabel = "[URL]")
         private String[] sourcesToRemove;
 
+        @SneakyThrows
         @Override
-        public Integer call() throws Exception {
+        public void run() {
             List<String> sources = Bootstrap.getConfig().getSources();
             int count = 0;
 
@@ -116,22 +116,23 @@ public class CommandSources implements Callable<Integer> {
 
             if (count == 0) {
                 Bootstrap.LOGGER.info("No sources removed.");
-                return 0;
+                return;
             } else {
                 Bootstrap.getConfig().save();
                 Bootstrap.LOGGER.info(""); // Newline.
-                return refresh();
+                refresh();
             }
         }
 
     }
 
     @Command(name = "refresh", description = "Refreshes the local sourcelist cache")
-    public static class CommandSourcesRefresh implements Callable<Integer> {
+    public static class CommandSourcesRefresh implements Runnable {
 
+        @SneakyThrows
         @Override
-        public Integer call() throws Exception {
-            return refresh();
+        public void run() {
+            refresh();
         }
 
     }

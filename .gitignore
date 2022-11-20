@@ -11,6 +11,4 @@
 .DS_Store
 *target/
 */Test.class
-cli/config.json
-cli/sources-cache.json
-cli/install-cache.json
+cli/aion_test/*

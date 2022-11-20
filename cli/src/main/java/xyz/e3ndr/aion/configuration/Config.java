@@ -17,7 +17,7 @@ import xyz.e3ndr.aion.Aion;
 @Getter
 @JsonClass(exposeAll = true)
 public class Config {
-    private static final File FILE = new File("config.json");
+    private static final File FILE = new File(Aion.BASE_DIR, "config.json");
 
     private List<String> sources = null;
 

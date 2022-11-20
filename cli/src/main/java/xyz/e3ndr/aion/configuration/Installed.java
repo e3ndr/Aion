@@ -16,7 +16,7 @@ import xyz.e3ndr.aion.types.AionPackage;
 @Getter
 @JsonClass(exposeAll = true)
 public class Installed {
-    private static final File FILE = new File("install-cache.json");
+    private static final File FILE = new File(Aion.BASE_DIR, "install-cache.json");
 
     public static void save(List<AionPackage.Version> installList) {
         try {

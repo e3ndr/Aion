@@ -1,5 +1,6 @@
 package xyz.e3ndr.aion;
 
+import java.io.File;
 import java.util.List;
 
 import xyz.e3ndr.aion.configuration.Config;
@@ -11,6 +12,7 @@ import xyz.e3ndr.aion.types.AionSourceList;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class Aion {
+    public static final File BASE_DIR = new File(System.getProperty("aion.basedir", "."));
     public static final FastLogger LOGGER = new FastLogger("Aion");
 
     private static Config config;

@@ -16,7 +16,7 @@ import xyz.e3ndr.aion.types.AionSourceList;
 @Getter
 @JsonClass(exposeAll = true)
 public class Sources {
-    private static final File FILE = new File("sources-cache.json");
+    private static final File FILE = new File(Aion.BASE_DIR, "sources-cache.json");
 
     public static void save(List<AionSourceList> sourcesCache) {
         try {

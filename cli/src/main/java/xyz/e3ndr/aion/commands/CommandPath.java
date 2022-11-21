@@ -1,5 +1,8 @@
 package xyz.e3ndr.aion.commands;
 
+import java.util.Map.Entry;
+
+import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -26,8 +29,18 @@ public class CommandPath implements Runnable {
 
     @Override
     public void run() {
-        // TODO
-        Aion.LOGGER.fatal("TODO");
+        if (Aion.config().getPathConfiguration().isEmpty()) {
+            Aion.LOGGER.info("No packages are configured to be on the path.");
+            return;
+        }
+
+        Aion.LOGGER.info("Path:");
+        for (Entry<String, Pair<String, String>> entry : Aion.config().getPathConfiguration().entrySet()) {
+            String command = entry.getKey();
+            String version = String.format("%s:%s", entry.getValue().a(), entry.getValue().b());
+
+            Aion.LOGGER.info("    %s=%s", command, version);
+        }
     }
 
     @AllArgsConstructor
@@ -35,7 +48,7 @@ public class CommandPath implements Runnable {
     public static class CommandPathWhat implements Runnable {
 
         @Parameters(arity = "1..*", description = "The list of packages to list commands for.", paramLabel = "PACKAGE[:VERSION]")
-        private String[] interim_packagesToInstall;
+        private String[] interim_packagesToList;
 
         @Override
         public void run() {

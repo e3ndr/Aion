@@ -11,15 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.rakurai.json.Rson;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import co.casterlabs.rakurai.json.annotating.JsonDeserializationMethod;
 import co.casterlabs.rakurai.json.annotating.JsonExclude;
 import co.casterlabs.rakurai.json.annotating.JsonSerializationMethod;
 import co.casterlabs.rakurai.json.element.JsonElement;
+import co.casterlabs.rakurai.json.element.JsonObject;
 import co.casterlabs.rakurai.json.validation.JsonValidate;
 import lombok.Getter;
 import xyz.e3ndr.aion.Aion;
+import xyz.e3ndr.aion.commands.AionCommands;
 
 @Getter
 @JsonClass(exposeAll = true)
@@ -27,7 +30,7 @@ public class Config {
     private static final File FILE = new File(Aion.BASE_DIR, "config.json");
 
     private List<String> sources = null;
-    private @JsonExclude Map<String, String> pathConfiguration = new HashMap<>();
+    private @JsonExclude Map<String, Pair<String, String>> pathConfiguration = new HashMap<>();
 
     @JsonValidate
     private void $validate() {
@@ -74,13 +77,23 @@ public class Config {
     @JsonDeserializationMethod("pathConfiguration")
     private void $deserialize_pathConfiguration(JsonElement e) {
         for (Entry<String, JsonElement> entry : e.getAsObject()) {
-            this.pathConfiguration.put(entry.getKey(), entry.getValue().getAsString());
+            Pair<String, String> configuration = AionCommands.parseVersion(entry.getValue().getAsString());
+
+            this.pathConfiguration.put(entry.getKey(), configuration);
         }
     }
 
     @JsonSerializationMethod("pathConfiguration")
     private JsonElement $serialize_pathConfiguration() {
-        return Rson.DEFAULT.toJson(this.pathConfiguration);
+        JsonObject result = new JsonObject();
+
+        for (Entry<String, Pair<String, String>> entry : this.pathConfiguration.entrySet()) {
+            String value = String.format("%s:%s", entry.getValue().a(), entry.getValue().b());
+
+            result.put(entry.getKey(), value);
+        }
+
+        return result;
     }
 
 }

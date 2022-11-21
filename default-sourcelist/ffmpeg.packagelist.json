@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "ffmpeg",
+    "aliases": [
+      "ffplay",
+      "ffprobe"
+    ],
+    "latest": "5",
+    "versions": {
+      "5": {
+        "patch": "5.1.2",
+        "depends": [],
+        "binaries": {
+          "X86_64": {
+            "WINDOWS_NT": "https://github.com/GyanD/codexffmpeg/releases/download/5.1.2/ffmpeg-5.1.2-full_build-shared.zip"
+          }
+        },
+        "commands": {
+          "ffmpeg": "/bin/ffmpeg",
+          "ffplay": "/bin/ffplay",
+          "ffprobe": "/bin/ffprobe"
+        },
+        "extract": {
+          "base": "ffmpeg-5.1.2-full_build-shared",
+          "discard": []
+        }
+      }
+    }
+  }
+]

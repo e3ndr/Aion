@@ -3,5 +3,7 @@
     "additionalSources": [
         "/java/sourcelist.json"
     ],
-    "additionalPackages": []
+    "additionalPackages": [
+        "/ffmpeg.packagelist.json"
+    ]
 }

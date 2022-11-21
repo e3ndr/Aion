@@ -2,9 +2,16 @@
 
 This is the default sourcelist for Aion. The following packages are provided here:
 
-- [OpenJDK Temurin](https://adoptium.net)
-  - `java-temurin-jdk` (19, 18, 17, 16, 11, 8)
-  - `java-temurin-jre` (19, 18, 17, 16, 11, 8)
+- -
+  - `java-temurin-jre` (19, 18, 17, 16, 11, 8) [X86_64, X86, AARCH64, ARM]
+- [FFMpeg](https://ffmpeg.org)
+  - `ffmpeg/ffprobe/ffplay` (5) [X86_64, X86, AARCH64, ARM]
+
+| Source                                   | Package Name       | Aliases             | Major Versions        | Supported Systems                                 |
+| ---------------------------------------- | ------------------ | ------------------- | --------------------- | ------------------------------------------------- |
+| [Adoptium Temurin](https://adoptium.net) | `java-temurin-jdk` | `jdk`               | 19, 18, 17, 16, 11, 8 | Windows, macOS, Linux (X86_64, X86, AARCH64, ARM) |
+| [Adoptium Temurin](https://adoptium.net) | `java-temurin-jre` | `java`              | 19, 18, 17, 16, 11, 8 | Windows, macOS, Linux (X86_64, X86, AARCH64, ARM) |
+| [FFmpeg](https://ffmpeg.org)             | `ffmpeg`           | `ffplay`, `ffprobe` | 5                     | Windows (X86_64)                                  |
 
 ## Updating
 

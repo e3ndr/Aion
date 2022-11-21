@@ -16,9 +16,9 @@
           }
         },
         "commands": {
-          "ffmpeg": "/bin/ffmpeg",
-          "ffplay": "/bin/ffplay",
-          "ffprobe": "/bin/ffprobe"
+          "ffmpeg": "bin/ffmpeg",
+          "ffplay": "bin/ffplay",
+          "ffprobe": "bin/ffprobe"
         },
         "extract": {
           "base": "ffmpeg-5.1.2-full_build-shared",

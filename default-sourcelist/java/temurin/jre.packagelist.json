@@ -27,7 +27,7 @@
           }
         },
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk8u352-b08-jre",
@@ -59,7 +59,7 @@
           }
         },
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk-11.0.17+8-jre",
@@ -75,7 +75,7 @@
         "depends": [],
         "binaries": {},
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk-16.0.2+7-jre",
@@ -107,7 +107,7 @@
           }
         },
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk-17.0.5+8-jre",
@@ -139,7 +139,7 @@
           }
         },
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk-18.0.2.1+1-jre",
@@ -171,7 +171,7 @@
           }
         },
         "commands": {
-          "java": "/bin/java"
+          "java": "bin/java"
         },
         "extract": {
           "base": "jdk-19.0.1+10-jre",

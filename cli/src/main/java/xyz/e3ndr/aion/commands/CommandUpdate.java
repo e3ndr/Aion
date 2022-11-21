@@ -3,6 +3,7 @@ package xyz.e3ndr.aion.commands;
 import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import xyz.e3ndr.aion.Aion;
 
 @AllArgsConstructor
 @Command(name = "update", description = "Updates the specified list of packages.")
@@ -23,6 +24,7 @@ public class CommandUpdate implements Runnable {
     @Override
     public void run() {
         // TODO
+        Aion.LOGGER.fatal("TODO");
     }
 
 }

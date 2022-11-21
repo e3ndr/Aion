@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathRebuild;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathWhat;
@@ -26,6 +27,7 @@ public class CommandPath implements Runnable {
     @Override
     public void run() {
         // TODO
+        Aion.LOGGER.fatal("TODO");
     }
 
     @AllArgsConstructor
@@ -38,6 +40,7 @@ public class CommandPath implements Runnable {
         @Override
         public void run() {
             // TODO
+            Aion.LOGGER.fatal("TODO");
         }
 
     }
@@ -61,6 +64,7 @@ public class CommandPath implements Runnable {
         @Override
         public void run() {
             // TODO
+            Aion.LOGGER.fatal("TODO");
         }
 
     }
@@ -72,6 +76,7 @@ public class CommandPath implements Runnable {
         @Override
         public void run() {
             // TODO
+            Aion.LOGGER.fatal("TODO");
         }
 
     }

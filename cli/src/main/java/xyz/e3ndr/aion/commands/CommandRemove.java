@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import xyz.e3ndr.aion.Aion;
 
 @AllArgsConstructor
 @Command(name = "remove", description = "Removes the specified packages.")
@@ -27,6 +28,7 @@ public class CommandRemove implements Runnable {
     @Override
     public void run() {
         // TODO
+        Aion.LOGGER.fatal("TODO");
     }
 
 }

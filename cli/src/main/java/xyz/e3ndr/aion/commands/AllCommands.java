@@ -31,7 +31,12 @@ public class AllCommands {
             .run();
     }
 
-    public static void path_update(boolean easy, String packageToUse, String[] commandsToUpdate) {
+    public static void path_what(String... packagesToCheck) {
+        new CommandPath.CommandPathWhat(packagesToCheck)
+            .run();
+    }
+
+    public static void path_update(boolean easy, String packageToUse, String... commandsToUpdate) {
         new CommandPath.CommandPathUpdate(easy, packageToUse, commandsToUpdate)
             .run();
     }

@@ -6,6 +6,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathRebuild;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
+import xyz.e3ndr.aion.commands.CommandPath.CommandPathWhat;
 
 @AllArgsConstructor
 //@formatter:off
@@ -14,6 +15,7 @@ import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
    description = "Lists all commands added to your path by Aion, run `aion path --help` to see subcommands.", 
    mixinStandardHelpOptions = true, 
    subcommands = {
+       CommandPathWhat.class,
        CommandPathUpdate.class,
        CommandPathRebuild.class,
    }
@@ -24,6 +26,20 @@ public class CommandPath implements Runnable {
     @Override
     public void run() {
         // TODO
+    }
+
+    @AllArgsConstructor
+    @Command(name = "what", description = "Lists all commands handled by the specified list of packages.")
+    public static class CommandPathWhat implements Runnable {
+
+        @Parameters(arity = "1..*", description = "The list of packages to list commands for.", paramLabel = "PACKAGE[:VERSION]")
+        private String[] interim_packagesToInstall;
+
+        @Override
+        public void run() {
+            // TODO
+        }
+
     }
 
     @AllArgsConstructor

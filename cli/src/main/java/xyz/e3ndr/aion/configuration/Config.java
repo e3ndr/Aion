@@ -28,7 +28,7 @@ import xyz.e3ndr.aion.commands.AionCommands;
 @JsonClass(exposeAll = true)
 public class Config {
     private static final File FILE = new File(Aion.BASE_DIR, "config.json");
-    private static final List<String> DEFAULT_SOURCES = Arrays.asList("test///");
+    private static final List<String> DEFAULT_SOURCES = Arrays.asList("https://raw.githubusercontent.com/e3ndr/Aion/main/default-sourcelist");
 
     private List<String> sources = new LinkedList<>(DEFAULT_SOURCES);
     private @JsonExclude Map<String, Pair<String, String>> pathConfiguration = new HashMap<>();

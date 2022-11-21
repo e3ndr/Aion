@@ -3,7 +3,7 @@ package xyz.e3ndr.aion.commands;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import xyz.e3ndr.aion.Aion;
-import xyz.e3ndr.aion.types.AionPackage;
+import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 
 @Command(name = "list", description = "Lists all installed packages.")
 public class CommandList implements Runnable {
@@ -17,8 +17,11 @@ public class CommandList implements Runnable {
         }
 
         Aion.LOGGER.info("Packages:");
-        for (AionPackage.Version version : Aion.installCache()) {
-            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
+        for (InstallCacheEntry entry : Aion.installCache()) {
+            Aion.LOGGER.info(
+                "    %s:%s (%s) %s",
+                entry.pkg.getSlug(), entry.version, entry.pkg.getVersions().get(entry.version).getPatch(), entry.pkg.getAliases()
+            );
         }
     }
 

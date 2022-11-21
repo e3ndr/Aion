@@ -1,6 +1,7 @@
 package xyz.e3ndr.aion;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class Util {
     }
 
     @SafeVarargs
-    public static <T> List<T> concat(List<T>... lists) {
+    public static <T> List<T> concat(Collection<T>... collections) {
         List<T> list = new LinkedList<>();
 
-        for (List<T> l : lists) {
-            list.addAll(l);
+        for (Collection<T> c : collections) {
+            list.addAll(c);
         }
 
         return list;

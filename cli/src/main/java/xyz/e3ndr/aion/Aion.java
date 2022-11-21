@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Set;
 
 import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
+import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 import xyz.e3ndr.aion.configuration.Sources;
-import xyz.e3ndr.aion.types.AionPackage;
-import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
@@ -29,7 +29,7 @@ public class Aion {
 
     private static Config _config;
     private static List<AionSourceList> _sourceCache;
-    private static List<AionPackage.Version> _installCache;
+    private static Set<InstallCacheEntry> _installCache;
 
     public static void setup() {
         DOWNLOAD_DIR.mkdirs();
@@ -110,7 +110,7 @@ public class Aion {
         return _sourceCache;
     }
 
-    public static List<Version> installCache() {
+    public static Set<InstallCacheEntry> installCache() {
         if (_installCache == null) {
             _installCache = Installed.load();
         }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,17 @@ public class AionPackage {
         }
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.slug);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        return this.hashCode() == obj.hashCode();
+    }
+
     @Getter
     @JsonClass(exposeAll = true)
     public static class Version {
@@ -73,6 +85,17 @@ public class AionPackage {
 
         @JsonField("extract")
         private ExtractionPlan extractionPlan;
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.pkg.slug, this.version);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) return false;
+            return this.hashCode() == obj.hashCode();
+        }
 
         public @Nullable String getBinaryLocation(Arch arch, OSDistribution dist) {
             return this.binaries

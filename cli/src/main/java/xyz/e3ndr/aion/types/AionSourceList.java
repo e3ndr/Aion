@@ -2,6 +2,7 @@ package xyz.e3ndr.aion.types;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +26,17 @@ public class AionSourceList {
     private String[] additionalPackages;
 
     private List<AionPackage> packageList = new LinkedList<>();
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.url);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        return this.hashCode() == obj.hashCode();
+    }
 
     @JsonValidate
     private void $validate() {

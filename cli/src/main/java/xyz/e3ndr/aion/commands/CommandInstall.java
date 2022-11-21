@@ -3,8 +3,10 @@ package xyz.e3ndr.aion.commands;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
@@ -21,8 +23,9 @@ import xyz.e3ndr.aion.Resolver;
 import xyz.e3ndr.aion.UserInput;
 import xyz.e3ndr.aion.Util;
 import xyz.e3ndr.aion.archive.Archives;
+import xyz.e3ndr.aion.configuration.Installed;
+import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 import xyz.e3ndr.aion.types.AionPackage;
-import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
 
 @Command(name = "install", description = "Installs the specified list of packages.")
@@ -58,11 +61,17 @@ public class CommandInstall implements Runnable {
             packagesToFind.add(parseVersion(pkg));
         }
 
-        List<Version> alreadyInstalled = this.reinstall ? Collections.emptyList() : Aion.installCache();
+        Set<InstallCacheEntry> currentInstallCache = Aion.installCache();
+        Set<InstallCacheEntry> predictedNewInstallCache = new HashSet<>();
+
+        if (!this.reinstall) {
+            // We need to make sure we don't already have the packages/dependencies.
+            predictedNewInstallCache.addAll(currentInstallCache);
+        }
 
         // Look for the packages in the source cache.
         Aion.LOGGER.info("Looking for packages...");
-        List<AionPackage.Version> packages = findPackages(packagesToFind, alreadyInstalled); // There's a comment below referring to this line.
+        List<AionPackage.Version> packages = findPackages(packagesToFind, predictedNewInstallCache); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
         Aion.LOGGER.info("The following packages will be installed:");
@@ -70,8 +79,12 @@ public class CommandInstall implements Runnable {
             Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
         }
 
+        packages
+            .parallelStream()
+            .forEach((v) -> predictedNewInstallCache.add(new InstallCacheEntry(v.getPkg(), v.getVersion())));
+
         Aion.LOGGER.info("Resolving dependencies...");
-        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(alreadyInstalled, packages));
+        List<AionPackage.Version> dependencies = resolveDependencies(packages, predictedNewInstallCache);
 
         if (dependencies.size() == 0) {
             Aion.LOGGER.info("No dependencies will be installed.");
@@ -80,6 +93,10 @@ public class CommandInstall implements Runnable {
             for (AionPackage.Version version : dependencies) {
                 Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
             }
+
+            dependencies
+                .parallelStream()
+                .forEach((v) -> predictedNewInstallCache.add(new InstallCacheEntry(v.getPkg(), v.getVersion())));
         }
 
         // Print out the changes.
@@ -170,11 +187,10 @@ public class CommandInstall implements Runnable {
 
             // TODO update the path if another package isn't already managing it.
 
+            // Update the install cache with the current progress.
+            currentInstallCache.add(new InstallCacheEntry(version.getPkg(), version.getVersion()));
+            Installed.save(predictedNewInstallCache);
         }
-
-//        Installed.save(newInstallCache);
-
-        // TODO
     }
 
     private static Pair<String, String> parseVersion(String pkg) {
@@ -197,7 +213,7 @@ public class CommandInstall implements Runnable {
     /**
      * @implNote null result means abort.
      */
-    private static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, List<Version> $alreadyHave) {
+    private static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
         if (packagesToFind.isEmpty()) return Collections.emptyList();
 
         List<AionPackage.Version> found = new LinkedList<>();
@@ -211,7 +227,7 @@ public class CommandInstall implements Runnable {
 
                 boolean alreadyHas = $alreadyHave
                     .parallelStream()
-                    .anyMatch((v) -> v.getPkg().getSlug().equals(slug) && v.getVersion().equals(version));
+                    .anyMatch((a) -> a.pkg.getSlug().equals(slug) && a.version.equals(version));
 
                 if (alreadyHas) {
                     if ($alreadyHave == Aion.installCache()) {
@@ -258,7 +274,7 @@ public class CommandInstall implements Runnable {
     /**
      * @implNote null result means abort.
      */
-    private static @Nullable List<AionPackage.Version> resolveDependencies(List<AionPackage.Version> packages, List<AionPackage.Version> $alreadyHave) {
+    private static @Nullable List<AionPackage.Version> resolveDependencies(List<AionPackage.Version> packages, Set<Installed.InstallCacheEntry> $alreadyHave) {
         if (packages.isEmpty()) return Collections.emptyList();
 
         List<Pair<String, String>> found = new LinkedList<>();

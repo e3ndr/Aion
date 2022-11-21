@@ -93,10 +93,10 @@ public class CommandPath implements Runnable {
     public static class CommandPathUpdate implements Runnable {
 
         @Option(names = {
-                "-e",
-                "--easy"
-        }, description = "If easy, then don't update the path IF another package already handles that command.")
-        private boolean easy = false;
+                "-s",
+                "--soft"
+        }, description = "If soft, then don't update the path IF another package already handles that command.")
+        private boolean soft = false;
 
         @Parameters(arity = "1", description = "The package to use for the commands.", paramLabel = "PACKAGE:VERSION")
         private String packageToUse;

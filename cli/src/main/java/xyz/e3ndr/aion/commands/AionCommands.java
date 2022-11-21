@@ -1,5 +1,9 @@
 package xyz.e3ndr.aion.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.AllArgsConstructor;
 
 /**
@@ -9,6 +13,35 @@ import lombok.AllArgsConstructor;
  * with the new method signatures (fix any errors).
  */
 public class AionCommands {
+
+    /* ---- Helpers ---- */
+
+    public static Pair<String, String> parseVersion(String pkg) {
+        String[] parts = pkg.split(":");
+
+        if (parts.length > 2) {
+            throw new IllegalArgumentException("Package declaration must be in the form of PACKAGE[:VERSION], got: " + pkg);
+        }
+
+        String slug = parts[0].toLowerCase();
+        String version = "LATEST";
+
+        if (parts.length == 2) {
+            version = parts[1];
+        }
+
+        return new Pair<>(slug, version);
+    }
+
+    public static List<Pair<String, String>> parseAllVersions(String... pkgs) {
+        List<Pair<String, String>> result = new ArrayList<>(pkgs.length);
+
+        for (String pkg : pkgs) {
+            result.add(parseVersion(pkg));
+        }
+
+        return result;
+    }
 
     /* ---- Install ---- */
 

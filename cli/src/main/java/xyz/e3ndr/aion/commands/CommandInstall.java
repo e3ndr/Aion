@@ -60,11 +60,7 @@ public class CommandInstall implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        // Parse the cli parameters.
-        List<Pair<String, String>> packagesToFind = new LinkedList<>();
-        for (String pkg : this.interim_packagesToInstall) {
-            packagesToFind.add(parseVersion(pkg));
-        }
+        List<Pair<String, String>> packagesToFind = AionCommands.parseAllVersions(this.interim_packagesToInstall);
 
         Set<InstallCacheEntry> currentInstallCache = Aion.installCache();
         Set<InstallCacheEntry> predictedNewInstallCache = new HashSet<>();
@@ -233,23 +229,6 @@ public class CommandInstall implements Runnable {
         }
     }
 
-    private static Pair<String, String> parseVersion(String pkg) {
-        String[] parts = pkg.split(":");
-
-        if (parts.length > 2) {
-            throw new IllegalArgumentException("Package declaration must be in the form of PACKAGE[:VERSION], got: " + pkg);
-        }
-
-        String slug = parts[0].toLowerCase();
-        String version = "LATEST";
-
-        if (parts.length == 2) {
-            version = parts[1];
-        }
-
-        return new Pair<>(slug, version);
-    }
-
     /**
      * @implNote null result means abort.
      */
@@ -321,7 +300,7 @@ public class CommandInstall implements Runnable {
 
         for (AionPackage.Version pkg : packages) {
             for (String depend : pkg.getDepends()) {
-                found.add(parseVersion(depend));
+                found.add(AionCommands.parseVersion(depend));
             }
         }
 

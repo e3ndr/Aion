@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
  * generate the constructors, just make sure that this class stays up-to-date
  * with the new method signatures (fix any errors).
  */
-public class AllCommands {
+public class AionCommands {
 
     /* ---- Install ---- */
 

@@ -74,7 +74,7 @@ public class CommandSources implements Runnable {
             } else {
                 Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
-                AllCommands.sources_refresh();
+                AionCommands.sources_refresh();
             }
         }
 
@@ -110,7 +110,7 @@ public class CommandSources implements Runnable {
             } else {
                 Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
-                AllCommands.sources_refresh();
+                AionCommands.sources_refresh();
             }
         }
 

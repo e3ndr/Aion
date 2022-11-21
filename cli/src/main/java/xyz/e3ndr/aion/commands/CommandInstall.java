@@ -124,7 +124,6 @@ public class CommandInstall implements Runnable {
             }
         }
 
-        // Download and install all the packages.
         for (AionPackage.Version version : Util.concat(dependencies, packages)) {
             String binaryLocation = version.getBinaryLocation(Platform.arch, Platform.osDistribution);
             if (binaryLocation == null) {
@@ -221,11 +220,16 @@ public class CommandInstall implements Runnable {
                 }
             }
 
-            // TODO update the path if another package isn't already managing it.
+            // Update the path commands IF not already taken.
+            AionCommands.path_update(
+                true,
+                String.format("%s:%s", version.getPkg().getSlug(), version.getVersion()),
+                version.getCommands().keySet().toArray(new String[0])
+            );
 
             // Update the install cache with the current progress.
             currentInstallCache.add(new InstallCacheEntry(version.getPkg(), version.getVersion()));
-            Installed.save(predictedNewInstallCache);
+            Installed.save(currentInstallCache);
         }
     }
 

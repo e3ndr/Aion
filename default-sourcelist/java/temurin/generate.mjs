@@ -100,12 +100,11 @@ function parseReleaseInfo(json) {
         depends: ["java:" + version],
         binaries: jdkBinaries,
         commands: {
-          java: "/bin/java %@",
           javac: "/bin/javac %@",
         },
         extract: {
           base: json.name, // Move into this sub-folder.
-          discard: ["/include/.*", "/jre/.*", "/sample/.*", "src.zip"],
+          discard: ["/include/.*", "/jre/.*", "/sample/.*", ".*src.zip"],
         },
       },
     ],
@@ -121,6 +120,7 @@ function parseReleaseInfo(json) {
         },
         extract: {
           base: json.name + "-jre", // Move into this sub-folder.
+          discard: ["/include/.*", "/sample/.*", ".*src.zip"],
         },
       },
     ],

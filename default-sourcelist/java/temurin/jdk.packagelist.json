@@ -29,7 +29,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk8u352-b08",
@@ -64,7 +64,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk-11.0.17+8",
@@ -98,7 +98,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk-16.0.2+7",
@@ -133,7 +133,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk-17.0.5+8",
@@ -168,7 +168,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk-18.0.2.1+1",
@@ -203,7 +203,7 @@
           }
         },
         "commands": {
-          "javac": "/bin/javac %@"
+          "javac": "/bin/javac"
         },
         "extract": {
           "base": "jdk-19.0.1+10",

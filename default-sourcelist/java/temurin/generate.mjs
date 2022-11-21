@@ -100,7 +100,7 @@ function parseReleaseInfo(json) {
         depends: ["java:" + version],
         binaries: jdkBinaries,
         commands: {
-          javac: "/bin/javac %@",
+          javac: "/bin/javac",
         },
         extract: {
           base: json.name, // Move into this sub-folder.
@@ -116,7 +116,7 @@ function parseReleaseInfo(json) {
         depends: [],
         binaries: jreBinaries,
         commands: {
-          java: "/bin/java %@",
+          java: "/bin/java",
         },
         extract: {
           base: json.name + "-jre", // Move into this sub-folder.

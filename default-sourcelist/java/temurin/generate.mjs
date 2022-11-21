@@ -105,14 +105,7 @@ function parseReleaseInfo(json) {
         },
         extract: {
           base: json.name, // Move into this sub-folder.
-          keep: [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README",
-          ],
+          discard: ["/include/.*", "/jre/.*", "/sample/.*", "src.zip"],
         },
       },
     ],
@@ -128,7 +121,6 @@ function parseReleaseInfo(json) {
         },
         extract: {
           base: json.name + "-jre", // Move into this sub-folder.
-          discard: ["release"],
         },
       },
     ],

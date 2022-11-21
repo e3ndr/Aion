@@ -34,13 +34,11 @@
         },
         "extract": {
           "base": "jdk8u352-b08",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       },
@@ -72,13 +70,11 @@
         },
         "extract": {
           "base": "jdk-11.0.17+8",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       },
@@ -109,13 +105,11 @@
         },
         "extract": {
           "base": "jdk-16.0.2+7",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       },
@@ -147,13 +141,11 @@
         },
         "extract": {
           "base": "jdk-17.0.5+8",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       },
@@ -185,13 +177,11 @@
         },
         "extract": {
           "base": "jdk-18.0.2.1+1",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       },
@@ -223,13 +213,11 @@
         },
         "extract": {
           "base": "jdk-19.0.1+10",
-          "keep": [
-            "/bin/.*",
-            "/lib/.*",
-            "/ASSEMBLY_EXCEPTION",
-            "/LICENSE",
-            "/NOTICE",
-            "/THIRD_PARTY_README"
+          "discard": [
+            "/include/.*",
+            "/jre/.*",
+            "/sample/.*",
+            "src.zip"
           ]
         }
       }

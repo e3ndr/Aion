@@ -30,10 +30,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk8u352-b08-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk8u352-b08-jre"
         }
       },
       "11": {
@@ -60,10 +57,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk-11.0.17+8-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk-11.0.17+8-jre"
         }
       },
       "16": {
@@ -74,10 +68,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk-16.0.2+7-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk-16.0.2+7-jre"
         }
       },
       "17": {
@@ -104,10 +95,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk-17.0.5+8-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk-17.0.5+8-jre"
         }
       },
       "18": {
@@ -134,10 +122,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk-18.0.2.1+1-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk-18.0.2.1+1-jre"
         }
       },
       "19": {
@@ -164,10 +149,7 @@
           "java": "/bin/java %@"
         },
         "extract": {
-          "base": "jdk-19.0.1+10-jre",
-          "discard": [
-            "release"
-          ]
+          "base": "jdk-19.0.1+10-jre"
         }
       }
     }

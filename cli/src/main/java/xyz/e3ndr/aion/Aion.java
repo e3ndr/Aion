@@ -27,6 +27,7 @@ public class Aion {
     public static final FastLogger LOGGER = new FastLogger("Aion");
     public static final String TEMP_FILE_EXT = ".tmp";
 
+    // TODO move these over to sqlite.
     private static Config _config;
     private static List<AionSourceList> _sourceCache;
     private static Set<InstallCacheEntry> _installCache;

@@ -42,21 +42,24 @@ public class Aion {
         // Add AION to the local path.
         AsyncTask.createNonDaemon(() -> {
             try {
+                File unixExecutableFile = new File(PATH_DIR, "aion");
+                File windowsExecutableFile = new File(PATH_DIR, "aion.bat");
+
                 Files.write(
-                    new File(PATH_DIR, "aion")
-                        .toPath(),
+                    unixExecutableFile.toPath(),
                     Resolver
                         .getString("resource:///path/aion")
                         .getBytes()
                 );
 
                 Files.write(
-                    new File(PATH_DIR, "aion.bat")
-                        .toPath(),
+                    windowsExecutableFile.toPath(),
                     Resolver
                         .getString("resource:///path/aion.bat")
                         .getBytes()
                 );
+
+                unixExecutableFile.setExecutable(true);
             } catch (IOException e) {
                 LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
             }
@@ -64,7 +67,7 @@ public class Aion {
 
     }
 
-    public static void updatePath(String pkg, String version, String command) {
+    public static void updatePath(String pkg, String version, String commandName) {
         AsyncTask.createNonDaemon(() -> {
             try {
                 String unixExecutable = Resolver.getString("resource:///path/path_format");
@@ -73,24 +76,21 @@ public class Aion {
                 unixExecutable = unixExecutable
                     .replace("{package}", pkg)
                     .replace("{version}", version)
-                    .replace("{command}", command);
+                    .replace("{command}", commandName);
                 windowsExecutable = windowsExecutable
                     .replace("{package}", pkg)
                     .replace("{version}", version)
-                    .replace("{command}", command + ".bat");
+                    .replace("{command}", commandName + ".bat");
 
-                Files.write(
-                    new File(PATH_DIR, command)
-                        .toPath(),
-                    unixExecutable.getBytes()
-                );
-                Files.write(
-                    new File(PATH_DIR, command + ".bat")
-                        .toPath(),
-                    windowsExecutable.getBytes()
-                );
+                File unixExecutableFile = new File(PATH_DIR, commandName);
+                File windowsExecutableFile = new File(PATH_DIR, commandName + ".bat");
+
+                Files.write(unixExecutableFile.toPath(), unixExecutable.getBytes());
+                Files.write(windowsExecutableFile.toPath(), windowsExecutable.getBytes());
+
+                unixExecutableFile.setExecutable(true);
             } catch (IOException e) {
-                LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
+                LOGGER.warn("Unable to write the `%s` command to path. Things may break.\n%s", commandName, e.getMessage());
             }
         });
     }

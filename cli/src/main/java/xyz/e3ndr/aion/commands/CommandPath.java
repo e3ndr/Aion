@@ -1,5 +1,6 @@
 package xyz.e3ndr.aion.commands;
 
+import java.util.List;
 import java.util.Map.Entry;
 
 import co.casterlabs.commons.functional.tuples.Pair;
@@ -12,6 +13,7 @@ import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathRebuild;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathWhat;
+import xyz.e3ndr.aion.types.AionPackage;
 
 //@NoArgsConstructor
 @AllArgsConstructor
@@ -55,8 +57,25 @@ public class CommandPath implements Runnable {
 
         @Override
         public void run() {
-            // TODO
-            Aion.LOGGER.fatal("TODO");
+            List<Pair<String, String>> packagesToFind = AionCommands.parseAllVersions(this.interim_packagesToList);
+
+            Aion.LOGGER.info("Looking for packages...");
+            List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, Aion.installCache());
+
+            Aion.LOGGER.info(""); // Newline.
+
+            for (AionPackage.Version version : packages) {
+                if (version.getCommands().isEmpty()) {
+                    Aion.LOGGER.fatal("%s:%s provides no commands.", version.getPkg().getSlug(), version.getVersion());
+                    continue;
+                }
+
+                Aion.LOGGER.fatal("%s:%s provides:", version.getPkg().getSlug(), version.getVersion());
+
+                for (String command : version.getCommands().keySet()) {
+                    Aion.LOGGER.fatal("    %s", command);
+                }
+            }
         }
 
     }

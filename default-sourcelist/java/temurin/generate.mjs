@@ -166,7 +166,7 @@ async function fetchAndAdd(v) {
     const filename = pkg.slug.substring(pkg.slug.lastIndexOf("-") + 1);
 
     fs.writeFileSync(
-      `${filename}.packagelist.json`,
+      `java/temurin/${filename}.packagelist.json`,
       JSON.stringify([pkg], null, 2)
     );
   }

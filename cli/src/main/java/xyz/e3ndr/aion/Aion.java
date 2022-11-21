@@ -67,8 +67,8 @@ public class Aion {
     public static void updatePath(String pkg, String version, String command) {
         AsyncTask.createNonDaemon(() -> {
             try {
-                String unixExecutable = Resolver.getString("resource:///path/exec_format");
-                String windowsExecutable = Resolver.getString("resource:///path/exec_format.bat");
+                String unixExecutable = Resolver.getString("resource:///path/path_format");
+                String windowsExecutable = Resolver.getString("resource:///path/path_format.bat");
 
                 unixExecutable = unixExecutable
                     .replace("{package}", pkg)

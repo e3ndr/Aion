@@ -40,6 +40,12 @@ public class CommandInstall implements Runnable {
     }, description = "Automatically confirms the Yes/No prompt.")
     private boolean autoYes = false;
 
+    @Option(names = {
+            "-re",
+            "--reinstall"
+    }, description = "Allows you to fully reinstall a package and it's dependencies without having to remove it first.")
+    private boolean reinstall = false;
+
     @Parameters(arity = "1..*", description = "The list of packages to install. Ommiting version will install the latest available.", paramLabel = "PACKAGE[:VERSION]")
     private String[] interim_packagesToInstall;
 
@@ -52,9 +58,11 @@ public class CommandInstall implements Runnable {
             packagesToFind.add(parseVersion(pkg));
         }
 
+        List<Version> alreadyInstalled = this.reinstall ? Collections.emptyList() : Aion.installCache();
+
         // Look for the packages in the source cache.
         Aion.LOGGER.info("Looking for packages...");
-        List<AionPackage.Version> packages = findPackages(packagesToFind, Aion.installCache()); // There's a comment below referring to this line.
+        List<AionPackage.Version> packages = findPackages(packagesToFind, alreadyInstalled); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
         Aion.LOGGER.info("The following packages will be installed:");
@@ -63,12 +71,7 @@ public class CommandInstall implements Runnable {
         }
 
         Aion.LOGGER.info("Resolving dependencies...");
-        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(Aion.installCache(), packages));
-
-        List<AionPackage.Version> newInstallCache = new LinkedList<>();
-        newInstallCache.addAll(Aion.installCache());
-        newInstallCache.addAll(dependencies);
-        newInstallCache.addAll(packages);
+        List<AionPackage.Version> dependencies = resolveDependencies(packages, Util.concat(alreadyInstalled, packages));
 
         if (dependencies.size() == 0) {
             Aion.LOGGER.info("No dependencies will be installed.");

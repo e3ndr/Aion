@@ -44,7 +44,7 @@ public class AionPackage {
     private void $validate() {
         // Get the LATEST version info, add it to the map. It's fine if this.latest
         // doesn't actually correspond to a version, we deal with it later.
-        this.versions.put(this.latest, this.versions.get(this.latest));
+        this.versions.put("LATEST", this.versions.get(this.latest));
 
         for (Map.Entry<String, Version> entry : this.versions.entrySet()) {
             Version version = entry.getValue();

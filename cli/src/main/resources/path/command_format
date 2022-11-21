@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+$AION_BASE_DIR/../binary/{command} $@

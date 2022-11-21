@@ -223,6 +223,7 @@ public class CommandInstall implements Runnable {
             // Update the path commands IF not already taken.
             AionCommands.path_update(
                 true,
+                true,
                 String.format("%s:%s", version.getPkg().getSlug(), version.getVersion()),
                 version.getCommands().keySet().toArray(new String[0])
             );
@@ -231,6 +232,8 @@ public class CommandInstall implements Runnable {
             currentInstallCache.add(new InstallCacheEntry(version.getPkg(), version.getVersion()));
             Installed.save(currentInstallCache);
         }
+
+        AionCommands.path_rebuild();
     }
 
     /**

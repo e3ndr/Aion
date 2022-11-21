@@ -158,8 +158,8 @@ public class AionCommands {
             .run();
     }
 
-    public static void path_update(boolean soft, String packageToUse, String... commandsToUpdate) {
-        new CommandPath.CommandPathUpdate(soft, packageToUse, commandsToUpdate)
+    public static void path_update(boolean soft, boolean noRebuild, String packageToUse, String... commandsToUpdate) {
+        new CommandPath.CommandPathUpdate(soft, noRebuild, packageToUse, commandsToUpdate)
             .run();
     }
 

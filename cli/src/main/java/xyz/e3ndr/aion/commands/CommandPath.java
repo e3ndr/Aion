@@ -98,6 +98,12 @@ public class CommandPath implements Runnable {
         }, description = "If soft, then don't update the path IF another package already handles that command.")
         private boolean soft = false;
 
+        @Option(names = {
+                "-nr",
+                "--no-rebuild"
+        }, description = "Prevents a rebuild after a change, Not recommended.")
+        private boolean noRebuild = false;
+
         @Parameters(arity = "1", description = "The package to use for the commands.", paramLabel = "PACKAGE:VERSION")
         private String packageToUse;
 
@@ -106,8 +112,58 @@ public class CommandPath implements Runnable {
 
         @Override
         public void run() {
-            // TODO
-            Aion.LOGGER.fatal("TODO");
+            AionPackage.Version version = AionCommands.findPackage(AionCommands.parseVersion(this.packageToUse), Aion.installCache());
+
+            if (version == null) {
+                Aion.LOGGER.fatal("Could not find package: %s", this.packageToUse);
+                return;
+            }
+
+            {
+                // We want to be able to log all of the issues, so we use a variable.
+                boolean abort = false;
+                for (String command : this.commandsToUpdate) {
+                    if (!version.getCommands().containsKey(command)) {
+                        Aion.LOGGER.fatal("%s:%s does not provide a command called `%s`!", version.getPkg().getSlug(), version.getVersion(), command);
+                        return;
+                    }
+                }
+                if (abort) {
+                    Aion.LOGGER.fatal("Aborting path update.");
+                    return;
+                }
+            }
+
+            boolean changed = false;
+
+            for (String command : this.commandsToUpdate) {
+                Pair<String, String> existing = Aion.config().getPathConfiguration().get(command);
+
+                if (existing == null) {
+                    Aion.LOGGER.info("Command `%s` is now set to be handled by %s:%s", command, version.getPkg().getSlug(), version.getVersion());
+                } else {
+                    if (this.soft) {
+                        Aion.LOGGER.warn("Command `%s` will not be updated, already handled by %s:%s", command, existing.a(), existing.b());
+                        continue;
+                    }
+
+                    Aion.LOGGER.info("Command `%s` will now be handled by %s:%s", command, version.getPkg().getSlug(), version.getVersion());
+                }
+
+                changed = true;
+                Aion.config().getPathConfiguration().put(command, new Pair<>(version.getPkg().getSlug(), version.getVersion()));
+            }
+
+            if (!changed) {
+                Aion.LOGGER.info("No commands changed.");
+                return;
+            }
+
+            Aion.config().save();
+
+            if (!this.noRebuild) {
+                AionCommands.path_rebuild();
+            }
         }
 
     }

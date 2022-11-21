@@ -1,3 +1,3 @@
 @ECHO OFF
 
-%AION_BASE_DIR%\..\commands\{command} %*
+%AION_BASE_DIR%..\binary\{command} %*

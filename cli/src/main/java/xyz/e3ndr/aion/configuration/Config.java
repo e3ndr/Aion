@@ -28,15 +28,16 @@ import xyz.e3ndr.aion.commands.AionCommands;
 @JsonClass(exposeAll = true)
 public class Config {
     private static final File FILE = new File(Aion.BASE_DIR, "config.json");
+    private static final List<String> DEFAULT_SOURCES = Arrays.asList("test///");
 
-    private List<String> sources = null;
+    private List<String> sources = new LinkedList<>(DEFAULT_SOURCES);
     private @JsonExclude Map<String, Pair<String, String>> pathConfiguration = new HashMap<>();
 
     @JsonValidate
     private void $validate() {
         if (this.sources == null) {
             Aion.LOGGER.debug("Configured sources is null, setting to default.");
-            this.sources = new LinkedList<>(Arrays.asList("test///"));
+            this.sources = new LinkedList<>(DEFAULT_SOURCES);
         }
     }
 

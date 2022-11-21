@@ -1,10 +1,20 @@
 package xyz.e3ndr.aion.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.jetbrains.annotations.Nullable;
 
 import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.AllArgsConstructor;
+import xyz.e3ndr.aion.Aion;
+import xyz.e3ndr.aion.configuration.Installed;
+import xyz.e3ndr.aion.types.AionPackage;
+import xyz.e3ndr.aion.types.AionSourceList;
 
 /**
  * This entire class is essentially a mapping of the commands to easy-to-use
@@ -15,6 +25,67 @@ import lombok.AllArgsConstructor;
 public class AionCommands {
 
     /* ---- Helpers ---- */
+
+    /**
+     * @implNote null result means abort.
+     */
+    public static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+        if (packagesToFind.isEmpty()) return Collections.emptyList();
+
+        List<AionPackage.Version> found = new LinkedList<>();
+
+        List<Pair<String, String>> packagesNotFound = packagesToFind
+            .parallelStream()
+            // Make sure we're not already installing a required package.
+            .filter((entry) -> {
+                String slug = entry.a();
+                String version = entry.b();
+
+                boolean alreadyHas = $alreadyHave
+                    .parallelStream()
+                    .anyMatch((a) -> a.pkg.getSlug().equals(slug) && a.version.equals(version));
+
+                if (alreadyHas) {
+                    if ($alreadyHave == Aion.installCache()) {
+                        // We want to change the this message if we're in dependency resolution.
+                        // We know if we're in dependency resolution because during the first iteration,
+                        // $alreadyHave will be the installCache. Scroll up to see the impl.
+                        Aion.LOGGER.info("    %s:%s is already installed, did you mean `update`?", slug, version);
+                    } else {
+                        Aion.LOGGER.info("    Dependency %s:%s is already installed.", slug, version);
+                    }
+                }
+
+                return !alreadyHas; // Remove the package if we already have it.
+            })
+            .filter((entry) -> {
+                String slug = entry.a();
+                String version = entry.b();
+//                Aion.LOGGER.debug("    Looking for package: %s:%s", slug, version);
+
+                for (AionSourceList sourcelist : Aion.sourceCache()) {
+                    AionPackage.Version v = sourcelist.findPackage(slug, version);
+                    if (v == null) continue; // Next source.
+
+                    found.add(v);
+                    return false; // Remove the current package.
+                }
+
+                return true; // Keep the current package.
+            })
+            .collect(Collectors.toList());
+        packagesToFind.clear();
+
+        // Couldn't find some packages, abort.
+        if (!packagesNotFound.isEmpty()) {
+            Aion.LOGGER.info("Could not find the following packages:");
+            for (Pair<String, String> entry : packagesNotFound) {
+                Aion.LOGGER.info("    %s:%s", entry.a(), entry.b());
+            }
+            return null;
+        }
+        return found;
+    }
 
     public static Pair<String, String> parseVersion(String pkg) {
         String[] parts = pkg.split(":");

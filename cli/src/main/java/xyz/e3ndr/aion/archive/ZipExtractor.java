@@ -35,7 +35,7 @@ class ZipExtractor implements Archives.Extractor {
 
                 // Check that the file is allowed.
                 if (!plan.allowFile(filename)) {
-                    Aion.LOGGER.debug("    File either was not specified in `keep` or was to be discarded.");
+                    Aion.LOGGER.debug("    File was either not specified in `keep` or was to be discarded.");
                     continue;
                 }
 

@@ -1,12 +1,9 @@
 package xyz.e3ndr.aion;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 
-import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
@@ -38,61 +35,6 @@ public class Aion {
         PATH_DIR.mkdirs();
 
         IOUtil.DEFAULT_BUFFER_SIZE = 1024; // 1kb
-
-        // Add AION to the local path.
-        AsyncTask.createNonDaemon(() -> {
-            try {
-                File unixExecutableFile = new File(PATH_DIR, "aion");
-                File windowsExecutableFile = new File(PATH_DIR, "aion.bat");
-
-                Files.write(
-                    unixExecutableFile.toPath(),
-                    Resolver
-                        .getString("resource:///path/aion")
-                        .getBytes()
-                );
-
-                Files.write(
-                    windowsExecutableFile.toPath(),
-                    Resolver
-                        .getString("resource:///path/aion.bat")
-                        .getBytes()
-                );
-
-                unixExecutableFile.setExecutable(true);
-            } catch (IOException e) {
-                LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
-            }
-        });
-
-    }
-
-    public static void updatePath(String pkg, String version, String commandName) {
-        AsyncTask.createNonDaemon(() -> {
-            try {
-                String unixExecutable = Resolver.getString("resource:///path/path_format");
-                String windowsExecutable = Resolver.getString("resource:///path/path_format.bat");
-
-                unixExecutable = unixExecutable
-                    .replace("{package}", pkg)
-                    .replace("{version}", version)
-                    .replace("{command}", commandName);
-                windowsExecutable = windowsExecutable
-                    .replace("{package}", pkg)
-                    .replace("{version}", version)
-                    .replace("{command}", commandName + ".bat");
-
-                File unixExecutableFile = new File(PATH_DIR, commandName);
-                File windowsExecutableFile = new File(PATH_DIR, commandName + ".bat");
-
-                Files.write(unixExecutableFile.toPath(), unixExecutable.getBytes());
-                Files.write(windowsExecutableFile.toPath(), windowsExecutable.getBytes());
-
-                unixExecutableFile.setExecutable(true);
-            } catch (IOException e) {
-                LOGGER.warn("Unable to write the `%s` command to path. Things may break.\n%s", commandName, e.getMessage());
-            }
-        });
     }
 
     // Getters, we want to load these things on-demand.

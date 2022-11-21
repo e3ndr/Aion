@@ -1,8 +1,14 @@
 package xyz.e3ndr.aion.commands;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import co.casterlabs.commons.async.AsyncTask;
 import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -10,6 +16,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
+import xyz.e3ndr.aion.Resolver;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathRebuild;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathWhat;
@@ -107,15 +114,98 @@ public class CommandPath implements Runnable {
 
 //    @NoArgsConstructor
     @AllArgsConstructor
-    @Command(name = "rebuild", description = "Rebuilds your path using the existing configuration, useful if you nuked the path somehow.")
+    @Command(name = "rebuild", description = "Rebuilds your path using the existing configuration, useful if you nuked the path somehow. Note that this will automatically purge missing packages from the path.")
     public static class CommandPathRebuild implements Runnable {
 
         @Override
         public void run() {
-            // TODO
-            Aion.LOGGER.fatal("TODO");
+            if (Aion.config().getPathConfiguration().isEmpty()) {
+                Aion.LOGGER.info("Path configuration is empty, did you mean `path update`?");
+                return;
+            }
+
+            Aion.LOGGER.info("Rebuilding path...");
+
+            boolean didModify = false;
+
+            Iterator<Map.Entry<String, Pair<String, String>>> it = Aion.config().getPathConfiguration().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Pair<String, String>> entry = it.next();
+
+                String command = entry.getKey();
+
+                boolean exists = AionCommands.findPackage(entry.getValue(), Aion.installCache()) != null;
+                if (!exists) {
+                    Aion.LOGGER.info("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
+                    it.remove();
+                    didModify = true;
+                    continue;
+                }
+
+                updateLocalPath(entry.getValue().a(), entry.getValue().b(), command);
+                Aion.LOGGER.info("Created command `%s` with package %s:%s.", command, entry.getValue().a(), entry.getValue().b());
+            }
+
+            addAionToLocalPath();
+
+            if (didModify) {
+                Aion.config().save(); // Save the modified configuration.
+            }
         }
 
+    }
+
+    private static void addAionToLocalPath() {
+        try {
+            File unixExecutableFile = new File(Aion.PATH_DIR, "aion");
+            File windowsExecutableFile = new File(Aion.PATH_DIR, "aion.bat");
+
+            Files.write(
+                unixExecutableFile.toPath(),
+                Resolver
+                    .getString("resource:///path/aion")
+                    .getBytes()
+            );
+
+            Files.write(
+                windowsExecutableFile.toPath(),
+                Resolver
+                    .getString("resource:///path/aion.bat")
+                    .getBytes()
+            );
+
+            unixExecutableFile.setExecutable(true);
+        } catch (IOException e) {
+            Aion.LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
+        }
+    }
+
+    private static void updateLocalPath(String pkg, String version, String commandName) {
+        AsyncTask.createNonDaemon(() -> {
+            try {
+                String unixExecutable = Resolver.getString("resource:///path/path_format");
+                String windowsExecutable = Resolver.getString("resource:///path/path_format.bat");
+
+                unixExecutable = unixExecutable
+                    .replace("{package}", pkg)
+                    .replace("{version}", version)
+                    .replace("{command}", commandName);
+                windowsExecutable = windowsExecutable
+                    .replace("{package}", pkg)
+                    .replace("{version}", version)
+                    .replace("{command}", commandName + ".bat");
+
+                File unixExecutableFile = new File(Aion.PATH_DIR, commandName);
+                File windowsExecutableFile = new File(Aion.PATH_DIR, commandName + ".bat");
+
+                Files.write(unixExecutableFile.toPath(), unixExecutable.getBytes());
+                Files.write(windowsExecutableFile.toPath(), windowsExecutable.getBytes());
+
+                unixExecutableFile.setExecutable(true);
+            } catch (IOException e) {
+                Aion.LOGGER.warn("Unable to write the `%s` command to path. Things may break.\n%s", commandName, e.getMessage());
+            }
+        });
     }
 
 }

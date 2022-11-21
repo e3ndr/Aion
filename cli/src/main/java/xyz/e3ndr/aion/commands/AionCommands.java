@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.types.AionPackage;
+import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
 
 /**
@@ -30,7 +31,22 @@ public class AionCommands {
      * @implNote null result means abort.
      */
     public static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
-        if (packagesToFind.isEmpty()) return Collections.emptyList();
+        Pair<List<Version>, List<Pair<String, String>>> result = findPackagesAndMissing(packagesToFind, $alreadyHave);
+
+        // Couldn't find some packages, abort.
+        if (!result.b().isEmpty()) {
+            Aion.LOGGER.info("Could not find the following packages:");
+            for (Pair<String, String> entry : result.b()) {
+                Aion.LOGGER.info("    %s:%s", entry.a(), entry.b());
+            }
+            return null;
+        }
+
+        return result.a();
+    }
+
+    public static Pair<List<AionPackage.Version>, List<Pair<String, String>>> findPackagesAndMissing(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+        if (packagesToFind.isEmpty()) return new Pair<>(Collections.emptyList(), Collections.emptyList());
 
         List<AionPackage.Version> found = new LinkedList<>();
 
@@ -59,32 +75,34 @@ public class AionCommands {
                 return !alreadyHas; // Remove the package if we already have it.
             })
             .filter((entry) -> {
-                String slug = entry.a();
-                String version = entry.b();
-//                Aion.LOGGER.debug("    Looking for package: %s:%s", slug, version);
+                AionPackage.Version v = findPackage(entry, $alreadyHave);
 
-                for (AionSourceList sourcelist : Aion.sourceCache()) {
-                    AionPackage.Version v = sourcelist.findPackage(slug, version);
-                    if (v == null) continue; // Next source.
-
+                if (v == null) {
+                    return true; // Keep the current package.
+                } else {
                     found.add(v);
                     return false; // Remove the current package.
                 }
-
-                return true; // Keep the current package.
             })
             .collect(Collectors.toList());
         packagesToFind.clear();
 
-        // Couldn't find some packages, abort.
-        if (!packagesNotFound.isEmpty()) {
-            Aion.LOGGER.info("Could not find the following packages:");
-            for (Pair<String, String> entry : packagesNotFound) {
-                Aion.LOGGER.info("    %s:%s", entry.a(), entry.b());
-            }
-            return null;
+        return new Pair<>(found, packagesNotFound);
+    }
+
+    public static @Nullable AionPackage.Version findPackage(Pair<String, String> packageToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+        String slug = packageToFind.a();
+        String version = packageToFind.b();
+//        Aion.LOGGER.debug("    Looking for package: %s:%s", slug, version);
+
+        for (AionSourceList sourcelist : Aion.sourceCache()) {
+            AionPackage.Version v = sourcelist.findPackage(slug, version);
+            if (v == null) continue; // Next source.
+
+            return v;
         }
-        return found;
+
+        return null;
     }
 
     public static Pair<String, String> parseVersion(String pkg) {

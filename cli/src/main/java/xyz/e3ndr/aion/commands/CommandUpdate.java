@@ -1,10 +1,12 @@
 package xyz.e3ndr.aion.commands;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import xyz.e3ndr.aion.Aion;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Command(name = "update", description = "Updates the specified list of packages.")
 public class CommandUpdate implements Runnable {

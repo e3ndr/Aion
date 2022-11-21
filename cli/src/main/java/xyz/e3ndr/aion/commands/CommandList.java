@@ -6,6 +6,7 @@ import picocli.CommandLine.Command;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 
+//@NoArgsConstructor
 @AllArgsConstructor
 @Command(name = "list", description = "Lists all installed packages.")
 public class CommandList implements Runnable {

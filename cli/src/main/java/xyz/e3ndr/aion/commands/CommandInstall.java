@@ -18,6 +18,7 @@ import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -32,6 +33,7 @@ import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionSourceList;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Command(name = "install", description = "Installs the specified list of packages.")
 public class CommandInstall implements Runnable {

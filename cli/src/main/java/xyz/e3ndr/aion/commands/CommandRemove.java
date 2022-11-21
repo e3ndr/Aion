@@ -1,11 +1,13 @@
 package xyz.e3ndr.aion.commands;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Command(name = "remove", description = "Removes the specified packages.")
 public class CommandRemove implements Runnable {

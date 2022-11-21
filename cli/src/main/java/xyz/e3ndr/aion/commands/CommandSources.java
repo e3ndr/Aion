@@ -16,6 +16,7 @@ import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRemove;
 import xyz.e3ndr.aion.configuration.Sources;
 import xyz.e3ndr.aion.types.AionSourceList;
 
+//@NoArgsConstructor
 @AllArgsConstructor
 // @formatter:off
 @Command(
@@ -44,6 +45,7 @@ public class CommandSources implements Runnable {
         }
     }
 
+//    @NoArgsConstructor
     @AllArgsConstructor
     @Command(name = "add", description = "Adds the specified sources.")
     public static class CommandSourcesAdd implements Runnable {
@@ -80,6 +82,7 @@ public class CommandSources implements Runnable {
 
     }
 
+//    @NoArgsConstructor
     @AllArgsConstructor
     @Command(name = "remove", description = "Removes the specified sources.")
     public static class CommandSourcesRemove implements Runnable {
@@ -116,6 +119,7 @@ public class CommandSources implements Runnable {
 
     }
 
+//    @NoArgsConstructor
     @AllArgsConstructor
     @Command(name = "refresh", description = "Refreshes the local sourcelist cache.")
     public static class CommandSourcesRefresh implements Runnable {

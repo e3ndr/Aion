@@ -136,7 +136,7 @@ public class CommandPath implements Runnable {
 
                 boolean exists = AionCommands.findPackage(entry.getValue(), Aion.installCache()) != null;
                 if (!exists) {
-                    Aion.LOGGER.info("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
+                    Aion.LOGGER.warn("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
                     it.remove();
                     didModify = true;
                     continue;

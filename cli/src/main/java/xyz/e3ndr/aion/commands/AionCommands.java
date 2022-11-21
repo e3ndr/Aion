@@ -35,9 +35,9 @@ public class AionCommands {
 
         // Couldn't find some packages, abort.
         if (!result.b().isEmpty()) {
-            Aion.LOGGER.info("Could not find the following packages:");
+            Aion.LOGGER.fatal("Could not find the following packages:");
             for (Pair<String, String> entry : result.b()) {
-                Aion.LOGGER.info("    %s:%s", entry.a(), entry.b());
+                Aion.LOGGER.fatal("    %s:%s", entry.a(), entry.b());
             }
             return null;
         }
@@ -66,7 +66,7 @@ public class AionCommands {
                         // We want to change the this message if we're in dependency resolution.
                         // We know if we're in dependency resolution because during the first iteration,
                         // $alreadyHave will be the installCache. Scroll up to see the impl.
-                        Aion.LOGGER.info("    %s:%s is already installed, did you mean `update`?", slug, version);
+                        Aion.LOGGER.warn("    %s:%s is already installed, did you mean `update`?", slug, version);
                     } else {
                         Aion.LOGGER.info("    Dependency %s:%s is already installed.", slug, version);
                     }

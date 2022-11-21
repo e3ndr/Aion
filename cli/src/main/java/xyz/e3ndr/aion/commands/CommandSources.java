@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -15,6 +16,7 @@ import xyz.e3ndr.aion.commands.CommandSources.CommandSourcesRemove;
 import xyz.e3ndr.aion.configuration.Sources;
 import xyz.e3ndr.aion.types.AionSourceList;
 
+@AllArgsConstructor
 // @formatter:off
 @Command(
     name = "sources", 
@@ -42,32 +44,7 @@ public class CommandSources implements Runnable {
         }
     }
 
-    public static Integer refresh() throws Exception {
-        Aion.LOGGER.info("Refreshing source cache, this may take some time.");
-
-        List<AionSourceList> sourcelists = Aion
-            .config()
-            .getSources()
-            .parallelStream()
-            .map((url) -> {
-                try {
-                    return Resolver.resolve(url);
-                } catch (IOException e) {
-                    Aion.LOGGER.fatal("An error occurred whilst grabbing sourcelist:\n%s", e);
-                    try {
-                        Thread.sleep(500); // Try to allow FLF to flush.
-                    } catch (InterruptedException e1) {}
-                    System.exit(1);
-                    return null;
-                }
-            })
-            .collect(Collectors.toList());
-
-        Sources.save(sourcelists);
-
-        return 0;
-    }
-
+    @AllArgsConstructor
     @Command(name = "add", description = "Adds the specified sources.")
     public static class CommandSourcesAdd implements Runnable {
 
@@ -97,12 +74,13 @@ public class CommandSources implements Runnable {
             } else {
                 Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
-                refresh();
+                AllCommands.sources_refresh();
             }
         }
 
     }
 
+    @AllArgsConstructor
     @Command(name = "remove", description = "Removes the specified sources.")
     public static class CommandSourcesRemove implements Runnable {
 
@@ -132,19 +110,40 @@ public class CommandSources implements Runnable {
             } else {
                 Aion.config().save();
                 Aion.LOGGER.info(""); // Newline.
-                refresh();
+                AllCommands.sources_refresh();
             }
         }
 
     }
 
+    @AllArgsConstructor
     @Command(name = "refresh", description = "Refreshes the local sourcelist cache.")
     public static class CommandSourcesRefresh implements Runnable {
 
         @SneakyThrows
         @Override
         public void run() {
-            refresh();
+            Aion.LOGGER.info("Refreshing source cache, this may take some time.");
+
+            List<AionSourceList> sourcelists = Aion
+                .config()
+                .getSources()
+                .parallelStream()
+                .map((url) -> {
+                    try {
+                        return Resolver.resolve(url);
+                    } catch (IOException e) {
+                        Aion.LOGGER.fatal("An error occurred whilst grabbing sourcelist:\n%s", e);
+                        try {
+                            Thread.sleep(500); // Try to allow FLF to flush.
+                        } catch (InterruptedException e1) {}
+                        System.exit(1);
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+
+            Sources.save(sourcelists);
         }
 
     }

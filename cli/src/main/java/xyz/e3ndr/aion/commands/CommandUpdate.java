@@ -1,9 +1,10 @@
 package xyz.e3ndr.aion.commands;
 
+import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
+@AllArgsConstructor
 @Command(name = "update", description = "Updates the specified list of packages.")
 public class CommandUpdate implements Runnable {
 
@@ -13,8 +14,11 @@ public class CommandUpdate implements Runnable {
     }, description = "Performs a dry run (no files will be modified).")
     private boolean isDryRun = false;
 
-    @Parameters(arity = "1..*", description = "The list of packages to update.", paramLabel = "PACKAGE:VERSION")
-    private String[] interim_packagesToUpdate;
+    @Option(names = {
+            "-y",
+            "--yes"
+    }, description = "Automatically confirms the Yes/No prompt.")
+    private boolean autoYes = false;
 
     @Override
     public void run() {

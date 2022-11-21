@@ -1,9 +1,11 @@
 package xyz.e3ndr.aion.commands;
 
+import lombok.AllArgsConstructor;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+@AllArgsConstructor
 @Command(name = "run", description = "Runs the specified command using the specified packages.")
 public class CommandRun implements Runnable {
 

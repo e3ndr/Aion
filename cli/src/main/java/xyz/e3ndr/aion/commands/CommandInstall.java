@@ -2,10 +2,13 @@ package xyz.e3ndr.aion.commands;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import co.casterlabs.commons.functional.tuples.Pair;
 import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.io.IOUtil;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -28,6 +32,7 @@ import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionSourceList;
 
+@AllArgsConstructor
 @Command(name = "install", description = "Installs the specified list of packages.")
 public class CommandInstall implements Runnable {
 
@@ -183,7 +188,42 @@ public class CommandInstall implements Runnable {
             Util.recursivelyMoveDirectoryContents(downloadWorkingDir, packageBinaryDir);
             Util.recursivelyDeleteDirectory(downloadWorkingDir.getParentFile());
 
-            // TODO build the command executables.
+            for (Entry<String, String> entry : version.getCommands().entrySet()) {
+                String commandName = entry.getKey();
+                String command = entry.getValue();
+
+                try {
+                    String unixExecutable = Resolver.getString("resource:///path/command_format");
+                    String windowsExecutable = Resolver.getString("resource:///path/command_format.bat");
+
+                    unixExecutable = unixExecutable
+                        .replace("{command}", command)
+                        .replace("\\", "/"); // Correct any path separators.
+                    windowsExecutable = windowsExecutable
+                        .replace("{command}", command)
+                        .replace("/", "\\"); // Correct any path separators.
+
+                    File unixExecutableFile = new File(packageCommandDir, commandName);
+                    File windowsExecutableFile = new File(packageCommandDir, commandName + ".bat");
+
+                    Files.write(
+                        unixExecutableFile.toPath(),
+                        unixExecutable.getBytes()
+                    );
+                    Files.write(
+                        windowsExecutableFile.toPath(),
+                        windowsExecutable.getBytes()
+                    );
+
+                    unixExecutableFile.setExecutable(true);
+                } catch (IOException e) {
+                    Aion.LOGGER.fatal(
+                        "Unable to write the `%s` command to %s:%s's commands directory.\n%s",
+                        version.getPkg().getSlug(), version.getVersion(), e
+                    );
+                    return;
+                }
+            }
 
             // TODO update the path if another package isn't already managing it.
 

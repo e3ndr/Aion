@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
-$AION_BASE_DIR../binary/{command} $@
+pathDir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+$pathDir/../binary/{command} $@

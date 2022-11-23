@@ -4,6 +4,7 @@
         "/java/sourcelist.json"
     ],
     "additionalPackages": [
-        "/ffmpeg.packagelist.json"
+        "/ffmpeg.packagelist.json",
+        "/go.packagelist.json"
     ]
 }

@@ -1,0 +1,67 @@
+[
+  {
+    "slug": "go",
+    "aliases": [],
+    "latest": "1.19",
+    "versions": {
+      "1.19": {
+        "patch": "1.19.3",
+        "depends": [],
+        "binaries": {
+          "X86_64": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.19.3.windows-amd64.zip",
+            "MACOS": "https://go.dev/dl/go1.19.3.darwin-amd64.tar.gz",
+            "LINUX": "https://go.dev/dl/go1.19.3.linux-amd64.tar.gz"
+          },
+          "X86": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.19.3.windows-386.zip",
+            "LINUX": "https://go.dev/dl/go1.19.3.linux-386.tar.gz"
+          },
+          "ARM64": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.19.3.windows-arm64.zip",
+            "MACOS": "https://go.dev/dl/go1.19.3.darwin-arm64.tar.gz",
+            "LINUX": "https://go.dev/dl/go1.19.3.linux-arm64.tar.gz"
+          },
+          "ARM": {
+            "LINUX": "https://go.dev/dl/go1.19.3.linux-armv6l.tar.gz"
+          }
+        },
+        "commands": {
+          "go": "bin/go"
+        },
+        "extract": {
+          "base": "go"
+        }
+      },
+      "1.18": {
+        "patch": "1.18.8",
+        "depends": [],
+        "binaries": {
+          "X86_64": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.18.8.windows-amd64.zip",
+            "MACOS": "https://go.dev/dl/go1.18.8.darwin-amd64.tar.gz",
+            "LINUX": "https://go.dev/dl/go1.18.8.linux-amd64.tar.gz"
+          },
+          "X86": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.18.8.windows-386.zip",
+            "LINUX": "https://go.dev/dl/go1.18.8.linux-386.tar.gz"
+          },
+          "ARM64": {
+            "WINDOWS_NT": "https://go.dev/dl/go1.18.8.windows-arm64.zip",
+            "MACOS": "https://go.dev/dl/go1.18.8.darwin-arm64.tar.gz",
+            "LINUX": "https://go.dev/dl/go1.18.8.linux-arm64.tar.gz"
+          },
+          "ARM": {
+            "LINUX": "https://go.dev/dl/go1.18.8.linux-armv6l.tar.gz"
+          }
+        },
+        "commands": {
+          "go": "bin/go"
+        },
+        "extract": {
+          "base": "go"
+        }
+      }
+    }
+  }
+]

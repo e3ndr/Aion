@@ -19,7 +19,7 @@ for (const version of GO_VERSIONS) {
         WINDOWS_NT: `https://go.dev/dl/go${version}.windows-386.zip`,
         LINUX: `https://go.dev/dl/go${version}.linux-386.tar.gz`,
       },
-      ARM64: {
+      AARCH64: {
         WINDOWS_NT: `https://go.dev/dl/go${version}.windows-arm64.zip`,
         MACOS: `https://go.dev/dl/go${version}.darwin-arm64.tar.gz`,
         LINUX: `https://go.dev/dl/go${version}.linux-arm64.tar.gz`,

@@ -77,9 +77,13 @@ public class CommandInstall implements Runnable {
         List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, this.reinstall ? Collections.emptySet() : currentInstallCache, this.silent); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
-        Aion.LOGGER.info("The following packages will be installed:");
-        for (AionPackage.Version version : packages) {
-            Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
+        if (packages.size() == 0) {
+            Aion.LOGGER.info("No packages will be installed.");
+        } else {
+            Aion.LOGGER.info("The following packages will be installed:");
+            for (AionPackage.Version version : packages) {
+                Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
+            }
         }
 
         packages

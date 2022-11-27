@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.types.AionPackage;
-import xyz.e3ndr.aion.types.AionPackage.Version;
 import xyz.e3ndr.aion.types.AionSourceList;
 
 /**
@@ -31,8 +30,37 @@ public class AionCommands {
     /**
      * @implNote null result means abort.
      */
+    public static @Nullable List<AionPackage.Version> searchPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+        List<AionPackage.Version> result = new LinkedList<>();
+        List<Pair<String, String>> missing = new LinkedList<>();
+
+        for (Pair<String, String> toFind : packagesToFind) {
+            AionPackage.Version found = findPackage(toFind, $alreadyHave);
+
+            if (found == null) {
+                missing.add(toFind);
+            } else {
+                result.add(found);
+            }
+        }
+
+        // Couldn't find some packages, abort.
+        if (!missing.isEmpty()) {
+            Aion.LOGGER.fatal("Could not find the following packages:");
+            for (Pair<String, String> entry : missing) {
+                Aion.LOGGER.fatal("    %s:%s", entry.a(), entry.b());
+            }
+            return null;
+        }
+
+        return result;
+    }
+
+    /**
+     * @implNote null result means abort.
+     */
     public static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave, boolean silent) {
-        Pair<List<Version>, List<Pair<String, String>>> result = findPackagesAndMissing(packagesToFind, $alreadyHave, silent);
+        Pair<List<AionPackage.Version>, List<Pair<String, String>>> result = findPackagesAndMissing(packagesToFind, $alreadyHave, silent);
 
         // Couldn't find some packages, abort.
         if (!result.b().isEmpty()) {

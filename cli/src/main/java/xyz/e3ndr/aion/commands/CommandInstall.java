@@ -57,6 +57,8 @@ public class CommandInstall implements Runnable {
     @Parameters(arity = "1..*", description = "The list of packages to install. Ommiting version will install the latest available.", paramLabel = "PACKAGE[:VERSION]")
     private String[] interim_packagesToInstall;
 
+    private boolean silent = false;
+
     @SneakyThrows
     @Override
     public void run() {
@@ -72,7 +74,7 @@ public class CommandInstall implements Runnable {
 
         // Look for the packages in the source cache.
         Aion.LOGGER.info("Looking for packages...");
-        List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, this.reinstall ? Collections.emptySet() : currentInstallCache); // There's a comment below referring to this line.
+        List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, this.reinstall ? Collections.emptySet() : currentInstallCache, this.silent); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
         Aion.LOGGER.info("The following packages will be installed:");
@@ -85,7 +87,7 @@ public class CommandInstall implements Runnable {
             .forEach((v) -> predictedNewInstallCache.add(new InstallCacheEntry(v.getPkg(), v.getVersion())));
 
         Aion.LOGGER.info("Resolving dependencies...");
-        List<AionPackage.Version> dependencies = resolveDependencies(packages, predictedNewInstallCache);
+        List<AionPackage.Version> dependencies = resolveDependencies(packages, predictedNewInstallCache, this.silent);
 
         if (dependencies.size() == 0) {
             Aion.LOGGER.info("No dependencies will be installed.");
@@ -239,7 +241,7 @@ public class CommandInstall implements Runnable {
     /**
      * @implNote null result means abort.
      */
-    private static @Nullable List<AionPackage.Version> resolveDependencies(List<AionPackage.Version> packages, Set<Installed.InstallCacheEntry> $alreadyHave) {
+    private static @Nullable List<AionPackage.Version> resolveDependencies(List<AionPackage.Version> packages, Set<Installed.InstallCacheEntry> $alreadyHave, boolean silent) {
         if (packages.isEmpty()) return Collections.emptyList();
 
         List<Pair<String, String>> found = new LinkedList<>();
@@ -250,8 +252,8 @@ public class CommandInstall implements Runnable {
             }
         }
 
-        List<AionPackage.Version> dependencies = AionCommands.findPackages(found, $alreadyHave);
-        dependencies.addAll(resolveDependencies(dependencies, $alreadyHave)); // Recurse.
+        List<AionPackage.Version> dependencies = AionCommands.findPackages(found, $alreadyHave, silent);
+        dependencies.addAll(resolveDependencies(dependencies, $alreadyHave, silent)); // Recurse.
 
         return dependencies;
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,8 @@ public class AionCommands {
     /**
      * @implNote null result means abort.
      */
-    public static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
-        Pair<List<Version>, List<Pair<String, String>>> result = findPackagesAndMissing(packagesToFind, $alreadyHave);
+    public static @Nullable List<AionPackage.Version> findPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave, boolean silent) {
+        Pair<List<Version>, List<Pair<String, String>>> result = findPackagesAndMissing(packagesToFind, $alreadyHave, silent);
 
         // Couldn't find some packages, abort.
         if (!result.b().isEmpty()) {
@@ -45,7 +46,7 @@ public class AionCommands {
         return result.a();
     }
 
-    public static Pair<List<AionPackage.Version>, List<Pair<String, String>>> findPackagesAndMissing(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+    public static Pair<List<AionPackage.Version>, List<Pair<String, String>>> findPackagesAndMissing(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave, boolean silent) {
         if (packagesToFind.isEmpty()) return new Pair<>(Collections.emptyList(), Collections.emptyList());
 
         List<AionPackage.Version> found = new LinkedList<>();
@@ -61,7 +62,7 @@ public class AionCommands {
                     .parallelStream()
                     .anyMatch((a) -> a.pkg.getSlug().equals(slug) && a.version.equals(version));
 
-                if (alreadyHas) {
+                if (alreadyHas && !silent) {
                     if ($alreadyHave == Aion.installCache()) {
                         // We want to change the this message if we're in dependency resolution.
                         // We know if we're in dependency resolution because during the first iteration,
@@ -119,6 +120,27 @@ public class AionCommands {
             version = parts[1];
         }
 
+        if (version.equalsIgnoreCase("LATEST")) {
+            // We have to figure out the real latest version from the sources cache.
+            // The install cache will be inaccurate during package resolution.
+            List<AionPackage> allPackages = new LinkedList<>();
+            Aion
+                .sourceCache()
+                .parallelStream()
+                .map((sl) -> sl.getPackageList())
+                .forEach(allPackages::addAll);
+
+            Optional<String> latest = allPackages
+                .parallelStream()
+                .filter((p) -> p.getSlug().equalsIgnoreCase(slug))
+                .map((p) -> p.getLatest())
+                .findAny();
+
+            if (latest.isPresent()) {
+                version = latest.get();
+            }
+        }
+
         return new Pair<>(slug, version);
     }
 
@@ -135,7 +157,7 @@ public class AionCommands {
     /* ---- Install ---- */
 
     public static void install(boolean isDryRun, boolean autoYes, boolean reinstall, String... packagesToInstall) {
-        new CommandInstall(isDryRun, autoYes, reinstall, packagesToInstall)
+        new CommandInstall(isDryRun, autoYes, reinstall, packagesToInstall, true)
             .run();
     }
 
@@ -177,7 +199,7 @@ public class AionCommands {
 
     /* ---- Run ---- */
 
-    public static void run(boolean autoInstall, String[] packagesToUse, String... command) {
+    public static void run(boolean autoInstall, String[] packagesToUse, String command) {
         new CommandRun(autoInstall, packagesToUse, command)
             .run();
     }

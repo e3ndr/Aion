@@ -67,7 +67,7 @@ public class CommandPath implements Runnable {
             List<Pair<String, String>> packagesToFind = AionCommands.parseAllVersions(this.interim_packagesToList);
 
             Aion.LOGGER.info("Looking for packages...");
-            List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, Aion.installCache());
+            List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, Aion.installCache(), true);
 
             Aion.LOGGER.info(""); // Newline.
 

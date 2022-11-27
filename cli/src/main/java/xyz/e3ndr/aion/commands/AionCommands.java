@@ -227,7 +227,7 @@ public class AionCommands {
 
     /* ---- Run ---- */
 
-    public static void run(boolean autoInstall, String[] packagesToUse, String command) {
+    public static void run(boolean autoInstall, String[] packagesToUse, String... command) {
         new CommandRun(autoInstall, packagesToUse, command)
             .run();
     }

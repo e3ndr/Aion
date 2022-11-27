@@ -26,7 +26,7 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Listing the commands and their packages.
   - [x] Updating which package controls what command.
   - [x] A path rebuild command.
-  - [ ] The RUN command.
+  - [x] The RUN command.
 - [x] Sources
   - [x] Listing all sources configured.
   - [x] Adding a new source.

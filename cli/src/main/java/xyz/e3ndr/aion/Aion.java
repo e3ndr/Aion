@@ -37,6 +37,13 @@ public class Aion {
         IOUtil.DEFAULT_BUFFER_SIZE = 1024; // 1kb
     }
 
+    public static void teardown() {
+        _config = null;
+        _sourceCache = null;
+        _installCache = null;
+        System.gc();
+    }
+
     // Getters, we want to load these things on-demand.
 
     public static Config config() {

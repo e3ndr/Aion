@@ -1,8 +1,11 @@
 package xyz.e3ndr.aion;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import co.casterlabs.rakurai.io.IOUtil;
 import xyz.e3ndr.aion.configuration.Config;
@@ -42,6 +45,51 @@ public class Aion {
         _sourceCache = null;
         _installCache = null;
         System.gc();
+    }
+
+    // Patch parsing & comparisons.
+
+    public static int[] figureOutIntness(String patch) {
+        final String COMMIT_HASH_REMOVE = "\\b[0-9a-f]{5,40}\\b";
+        final Pattern NUMBER_MATCHING = Pattern.compile("\\b[0-9]+\\b");
+
+        Matcher m = NUMBER_MATCHING.matcher(
+            patch
+                .replace(COMMIT_HASH_REMOVE, "")
+        );
+
+        List<String> numbers = new LinkedList<>();
+        while (m.find()) {
+            numbers.add(m.group());
+        }
+
+        int[] intness = new int[numbers.size()];
+
+        for (int i = 0; i < numbers.size(); i++) {
+            intness[i] = Integer.parseInt(numbers.get(i));
+        }
+
+        return intness;
+    }
+
+    /**
+     * @return true if intness1 is newer than intness2.
+     */
+    public static boolean compare(int[] intness1, int[] intness2) {
+        // Longer length means older.
+        if (intness1.length > intness2.length) {
+            return false;
+        } else if (intness1.length < intness2.length) {
+            return true;
+        } else {
+            for (int i = 0; i < intness1.length; i++) {
+                if (intness1[i] < intness2[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     // Getters, we want to load these things on-demand.

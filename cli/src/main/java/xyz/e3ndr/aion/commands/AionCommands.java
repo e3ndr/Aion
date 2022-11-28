@@ -184,8 +184,8 @@ public class AionCommands {
 
     /* ---- Install ---- */
 
-    public static void install(boolean isDryRun, boolean autoYes, boolean reinstall, String... packagesToInstall) {
-        new CommandInstall(isDryRun, autoYes, reinstall, packagesToInstall, true)
+    public static void install(boolean isDryRun, boolean autoYes, boolean reinstall, boolean soft, String... packagesToInstall) {
+        new CommandInstall(isDryRun, autoYes, reinstall, packagesToInstall, true, soft)
             .run();
     }
 

@@ -59,6 +59,8 @@ public class CommandInstall implements Runnable {
 
     private boolean silent = false;
 
+    private boolean soft = false;
+
     @SneakyThrows
     @Override
     public void run() {
@@ -73,13 +75,16 @@ public class CommandInstall implements Runnable {
         }
 
         // Look for the packages in the source cache.
-        Aion.LOGGER.info("Looking for packages...");
+        if (!this.soft) {
+            Aion.LOGGER.info("Looking for packages...");
+        }
+
         List<AionPackage.Version> packages = AionCommands.findPackages(packagesToFind, this.reinstall ? Collections.emptySet() : currentInstallCache, this.silent); // There's a comment below referring to this line.
         if (packages == null) return; // The error message will already be printed.
 
         if (packages.size() == 0) {
             Aion.LOGGER.info("No packages will be installed.");
-        } else {
+        } else if (!this.soft) {
             Aion.LOGGER.info("The following packages will be installed:");
             for (AionPackage.Version version : packages) {
                 Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
@@ -90,12 +95,15 @@ public class CommandInstall implements Runnable {
             .parallelStream()
             .forEach((v) -> predictedNewInstallCache.add(new InstallCacheEntry(v.getPkg(), v.getVersion())));
 
-        Aion.LOGGER.info("Resolving dependencies...");
+        if (!this.soft) {
+            Aion.LOGGER.info("Resolving dependencies...");
+        }
+
         List<AionPackage.Version> dependencies = resolveDependencies(packages, predictedNewInstallCache, this.silent);
 
-        if (dependencies.size() == 0) {
+        if (dependencies.size() == 0 && !this.soft) {
             Aion.LOGGER.info("No dependencies will be installed.");
-        } else {
+        } else if (!this.soft) {
             Aion.LOGGER.info("The following dependencies will be installed:");
             for (AionPackage.Version version : dependencies) {
                 Aion.LOGGER.info("    %s:%s (%s) %s", version.getPkg().getSlug(), version.getVersion(), version.getPatch(), version.getPkg().getAliases());
@@ -107,13 +115,15 @@ public class CommandInstall implements Runnable {
         }
 
         // Print out the changes.
-        int total = dependencies.size() + packages.size();
-        if (total == 0) {
-            Aion.LOGGER.info("No packages will be installed.");
-            return;
-        }
+        if (!this.soft) {
+            int total = dependencies.size() + packages.size();
+            if (total == 0) {
+                Aion.LOGGER.info("No packages will be installed.");
+                return;
+            }
 
-        Aion.LOGGER.info("A total of %d package(s) will be installed.", total);
+            Aion.LOGGER.info("A total of %d package(s) will be installed.", total);
+        }
 
         // Dry run
         if (this.isDryRun) {
@@ -239,7 +249,9 @@ public class CommandInstall implements Runnable {
             Installed.save(currentInstallCache);
         }
 
-        AionCommands.path_rebuild();
+        if (!this.soft) {
+            AionCommands.path_rebuild();
+        }
     }
 
     /**

@@ -44,7 +44,7 @@ public class CommandRun implements Runnable {
             Aion.LOGGER.setCurrentLevel(LogLevel.NONE);
         }
 
-        AionCommands.install(false, this.autoInstall, false, this.interim_packagesToUse);
+        AionCommands.install(false, this.autoInstall, false, false, this.interim_packagesToUse);
 
         // Resolve the packages.
         List<AionPackage.Version> packages = AionCommands.searchPackages(AionCommands.parseAllVersions(this.interim_packagesToUse), Aion.installCache());

@@ -122,7 +122,7 @@ public class CommandInstall implements Runnable {
         }
 
         if (!this.autoYes) {
-            Aion.LOGGER.info("Are you sure you wish to install the following packages? (Y/n)");
+            Aion.LOGGER.info("Are you sure you wish to install the above packages? (Y/n)");
 
             if (!UserInput.confirm()) {
                 Aion.LOGGER.info("Aborting install.");

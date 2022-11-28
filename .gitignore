@@ -12,3 +12,4 @@
 *target/
 */Test.class
 cli/aion_test/*
+cli/dist/*

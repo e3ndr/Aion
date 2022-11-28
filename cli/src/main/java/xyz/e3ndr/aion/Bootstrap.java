@@ -1,5 +1,8 @@
 package xyz.e3ndr.aion;
 
+import co.casterlabs.commons.platform.Arch;
+import co.casterlabs.commons.platform.OSDistribution;
+import co.casterlabs.commons.platform.Platform;
 import co.casterlabs.rakurai.json.annotating.JsonClass;
 import lombok.Getter;
 import picocli.CommandLine;
@@ -31,7 +34,7 @@ public class Bootstrap {
         new CommandLine(BASE)
             .setExecutionStrategy((parseResult) -> {
                 BASE.initCLIOptions(); // Intercept execution, do setup, then execute.
-                Aion.setup();
+                Aion.setup(BASE.arch, BASE.distribution);
 
                 return new CommandLine.RunLast().execute(parseResult);
             })
@@ -70,11 +73,34 @@ public class Bootstrap {
         }, description = "Disables colored console output.")
         private boolean noColor = false;
 
+        @Option(names = {
+                "--override-architecture"
+        }, description = "Overrides the current system cpu architecture, Not recommended.")
+        private Arch arch;
+
+        @Option(names = {
+                "--override-distribution"
+        }, description = "Overrides the current system distribution, Not recommended.")
+        private OSDistribution distribution;
+
         @Override
         public void run() {} // Never executed.
 
         private void initCLIOptions() {
             FastLoggingFramework.setColorEnabled(!this.noColor);
+
+            if (this.arch == null) {
+                this.arch = Platform.arch;
+            } else {
+                Aion.LOGGER.warn("System CPU architecture overriden to '%s', this may cause problems.", this.arch);
+            }
+
+            if (this.distribution == null) {
+                this.distribution = Platform.osDistribution;
+            } else {
+                Aion.LOGGER.warn("System distribution overriden to '%s', this may cause problems.", this.distribution);
+            }
+
             Aion.LOGGER.setCurrentLevel(this.verbosity);
         }
 

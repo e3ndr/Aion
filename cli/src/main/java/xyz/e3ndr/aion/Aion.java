@@ -7,7 +7,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import co.casterlabs.commons.platform.Arch;
+import co.casterlabs.commons.platform.OSDistribution;
 import co.casterlabs.rakurai.io.IOUtil;
+import lombok.Getter;
 import xyz.e3ndr.aion.configuration.Config;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
@@ -27,12 +30,18 @@ public class Aion {
     public static final FastLogger LOGGER = new FastLogger("Aion");
     public static final String TEMP_FILE_EXT = ".tmp";
 
+    private static @Getter Arch arch;
+    private static @Getter OSDistribution distribution;
+
     // TODO move these over to sqlite.
     private static Config _config;
     private static List<AionSourceList> _sourceCache;
     private static Set<InstallCacheEntry> _installCache;
 
-    public static void setup() {
+    public static void setup(Arch arch, OSDistribution distribution) {
+        Aion.arch = arch;
+        Aion.distribution = distribution;
+
         DOWNLOAD_DIR.mkdirs();
         PACKAGES_DIR.mkdirs();
         PATH_DIR.mkdirs();

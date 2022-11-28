@@ -141,7 +141,7 @@ public class CommandInstall implements Runnable {
         }
 
         for (AionPackage.Version version : Util.concat(dependencies, packages)) {
-            String binaryLocation = version.getBinaryLocation(Platform.arch, Platform.osDistribution);
+            String binaryLocation = version.getBinaryLocation(Aion.getArch(), Aion.getDistribution());
             if (binaryLocation == null) {
                 Aion.LOGGER.fatal("Could not find a binary for %s (%s) for package %s:%s", Platform.osDistribution, Platform.arch, version.getPkg().getSlug(), version.getVersion());
                 return;

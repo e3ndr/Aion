@@ -3,4 +3,6 @@
 pathDir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 baseDir="$pathDir/.."
 
+export AION_BASE_DIR=$baseDir
+
 $baseDir\runtime\bin\java -jar $baseDir\aion.jar $@

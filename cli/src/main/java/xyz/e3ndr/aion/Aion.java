@@ -19,9 +19,14 @@ import xyz.e3ndr.aion.types.AionSourceList;
 import xyz.e3ndr.fastloggingframework.logging.FastLogger;
 
 public class Aion {
+    public static final File BASE_DIR = new File(
+        System.getProperty(
+            "aion.basedir",
+            System.getenv().getOrDefault("AION_BASE_DIR", ".")
+        )
+    );
+
     // @formatter:off
-    public static final File BASE_DIR     = new File(System.getProperty("aion.basedir", "."));
-    
     public static final File DOWNLOAD_DIR = new File(BASE_DIR, "download-cache");
     public static final File PACKAGES_DIR = new File(BASE_DIR, "packages");
     public static final File PATH_DIR     = new File(BASE_DIR, "path");

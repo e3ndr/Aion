@@ -83,10 +83,10 @@ public class CommandUpdate implements Runnable {
             toUpdateAsString.add(String.format("%s:%s", version.getPkg().getSlug(), version.getVersion()));
         }
 
-        // Install...
+        // Install, this'll update the install cache.
         AionCommands.install(false, true, true, true, toUpdateAsString.toArray(new String[0]));
 
-        // Rebuild path.
+        // Rebuild path, this'll update the local path config.
         AionCommands.path_rebuild();
     }
 

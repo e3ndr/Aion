@@ -14,6 +14,7 @@ import co.casterlabs.commons.functional.tuples.Pair;
 import lombok.AllArgsConstructor;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.configuration.Installed;
+import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
 import xyz.e3ndr.aion.types.AionPackage;
 import xyz.e3ndr.aion.types.AionSourceList;
 
@@ -30,7 +31,7 @@ public class AionCommands {
     /**
      * @implNote null result means abort.
      */
-    public static @Nullable List<AionPackage.Version> searchPackages(List<Pair<String, String>> packagesToFind, Set<Installed.InstallCacheEntry> $alreadyHave) {
+    public static @Nullable List<AionPackage.Version> searchPackages(List<Pair<String, String>> packagesToFind, Set<InstallCacheEntry> $alreadyHave) {
         List<AionPackage.Version> result = new LinkedList<>();
         List<Pair<String, String>> missing = new LinkedList<>();
 

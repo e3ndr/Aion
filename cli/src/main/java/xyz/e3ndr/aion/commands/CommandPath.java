@@ -107,7 +107,7 @@ public class CommandPath implements Runnable {
         @Parameters(arity = "1", description = "The package to use for the commands.", paramLabel = "PACKAGE:VERSION")
         private String packageToUse;
 
-        @Parameters(arity = "2..*", description = "The list of commands to update.", paramLabel = "commands")
+        @Parameters(index = "1", arity = "1..*", description = "The list of commands to update.", paramLabel = "commands")
         private String[] commandsToUpdate;
 
         @Override

@@ -162,20 +162,26 @@ public class CommandPath implements Runnable {
             Aion.config().save();
 
             if (!this.noRebuild) {
-                AionCommands.path_rebuild();
+                AionCommands.path_rebuild(false);
             }
         }
 
     }
 
-//    @NoArgsConstructor
+    @NoArgsConstructor
     @AllArgsConstructor
     @Command(name = "rebuild", description = "Rebuilds your path using the existing configuration, useful if you nuked the path somehow. Note that this will automatically purge missing packages from the path.")
     public static class CommandPathRebuild implements Runnable {
 
+        @Option(names = {
+                "-f",
+                "--force"
+        }, description = "Forcefully rebuilds the path, Not recommended.")
+        private boolean force = false;
+
         @Override
         public void run() {
-            if (Aion.config().getPathConfiguration().isEmpty()) {
+            if (Aion.config().getPathConfiguration().isEmpty() && !this.force) {
                 Aion.LOGGER.info("Path configuration is empty, did you mean `path update`?");
                 return;
             }

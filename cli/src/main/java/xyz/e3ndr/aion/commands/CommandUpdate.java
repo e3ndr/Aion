@@ -87,7 +87,7 @@ public class CommandUpdate implements Runnable {
         AionCommands.install(false, true, true, true, toUpdateAsString.toArray(new String[0]));
 
         // Rebuild path, this'll update the local path config.
-        AionCommands.path_rebuild();
+        AionCommands.path_rebuild(false);
     }
 
 }

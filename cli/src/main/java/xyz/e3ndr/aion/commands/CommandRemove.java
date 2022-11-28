@@ -113,7 +113,7 @@ public class CommandRemove implements Runnable {
 
         // TODO find orphaned dependencies and recursively remove them.
 
-        AionCommands.path_rebuild();
+        AionCommands.path_rebuild(false);
     }
 
 }

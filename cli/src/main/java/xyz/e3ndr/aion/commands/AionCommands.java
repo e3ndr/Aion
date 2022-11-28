@@ -214,8 +214,8 @@ public class AionCommands {
             .run();
     }
 
-    public static void path_rebuild() {
-        new CommandPath.CommandPathRebuild()
+    public static void path_rebuild(boolean force) {
+        new CommandPath.CommandPathRebuild(force)
             .run();
     }
 

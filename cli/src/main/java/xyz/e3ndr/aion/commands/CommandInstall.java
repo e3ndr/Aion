@@ -252,7 +252,7 @@ public class CommandInstall implements Runnable {
         }
 
         if (!this.soft) {
-            AionCommands.path_rebuild();
+            AionCommands.path_rebuild(false);
         }
     }
 

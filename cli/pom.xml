@@ -37,11 +37,11 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>jeofetch</finalName>
+							<finalName>${project.name}</finalName>
 							<archive>
 								<manifest>
 									<mainClass>
-                                        xyz.e3ndr.jeofetch.Bootstrap
+                                        xyz.e3ndr.aion.Bootstrap
                                     </mainClass>
 								</manifest>
 							</archive>

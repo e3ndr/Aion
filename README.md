@@ -20,7 +20,7 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Listing all packages installed.
   - [x] Installing a package and it's dependencies.
   - [ ] Removing a package and pruning any orphaned dependencies. (A dependency on the path will NOT be considered orphaned)
-  - [ ] Updating all packages by parsing and comparing the `patch` version.
+  - [x] Updating all packages by parsing and comparing the `patch` version.
 - [x] Path
   - [x] Listing all commands provided by a package.
   - [x] Listing the commands and their packages.

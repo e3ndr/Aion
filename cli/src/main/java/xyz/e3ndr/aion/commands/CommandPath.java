@@ -207,6 +207,10 @@ public class CommandPath implements Runnable {
                     Aion.LOGGER.warn("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
                     it.remove();
                     didModify = true;
+
+                    new File(Aion.PATH_DIR, command).delete();
+                    new File(Aion.PATH_DIR, command + ".bat").delete();
+
                     continue;
                 }
 

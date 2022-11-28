@@ -187,10 +187,16 @@ public class CommandPath implements Runnable {
             Iterator<Map.Entry<String, Pair<String, String>>> it = Aion.config().getPathConfiguration().entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String, Pair<String, String>> entry = it.next();
-
                 String command = entry.getKey();
 
-                boolean exists = AionCommands.findPackage(entry.getValue(), Aion.installCache()) != null;
+                boolean exists = Aion
+                    .installCache()
+                    .parallelStream()
+                    .anyMatch(
+                        (installed) -> installed.pkg.getSlug().equals(entry.getValue().a()) &&
+                            installed.version.equals(entry.getValue().b())
+                    );
+
                 if (!exists) {
                     Aion.LOGGER.warn("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
                     it.remove();

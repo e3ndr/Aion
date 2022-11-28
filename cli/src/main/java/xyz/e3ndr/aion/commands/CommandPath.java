@@ -188,7 +188,7 @@ public class CommandPath implements Runnable {
 
             Aion.LOGGER.info("Rebuilding path...");
 
-            boolean didModify = false;
+            boolean didDeleteCommand = false;
 
             Iterator<Map.Entry<String, Pair<String, String>>> it = Aion.config().getPathConfiguration().entrySet().iterator();
             while (it.hasNext()) {
@@ -206,7 +206,7 @@ public class CommandPath implements Runnable {
                 if (!exists) {
                     Aion.LOGGER.warn("%s:%s no longer exists, removing command `%s`.", entry.getValue().a(), entry.getValue().b(), command);
                     it.remove();
-                    didModify = true;
+                    didDeleteCommand = true;
 
                     new File(Aion.PATH_DIR, command).delete();
                     new File(Aion.PATH_DIR, command + ".bat").delete();
@@ -220,7 +220,7 @@ public class CommandPath implements Runnable {
 
             addAionToLocalPath();
 
-            if (didModify) {
+            if (didDeleteCommand) {
                 Aion.config().save(); // Save the modified configuration.
             }
         }

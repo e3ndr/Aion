@@ -20,17 +20,17 @@ JAVA_VERSION="11"
 
 PLATFORMS=(
     # Windows
-    "distribution='WINDOWS_NT';arch='x86_64'"
-    "distribution='WINDOWS_NT';arch='x86'"
+    "distribution='WINDOWS_NT';arch='X86_64'"
+    "distribution='WINDOWS_NT';arch='X86'"
 
     # ---- TODO implement the decompression for .tar.gz so we can build for Linux and macOS. ----
     # Linux
-    #"distribution='LINUX';arch='x86_64'"
+    #"distribution='LINUX';arch='X86_64'"
     #"distribution='LINUX';arch='AARCH64'"
     #"distribution='LINUX';arch='ARM'"
 
     # macOS
-    #"distribution='MACOS';arch='x86_64'"
+    #"distribution='MACOS';arch='X86_64'"
     #"distribution='MACOS';arch='AARCH64'"
 )
 

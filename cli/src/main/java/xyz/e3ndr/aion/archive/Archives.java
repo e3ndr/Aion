@@ -1,13 +1,10 @@
 package xyz.e3ndr.aion.archive;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 
 import org.jetbrains.annotations.Nullable;
 
 import lombok.AllArgsConstructor;
-import xyz.e3ndr.aion.types.ExtractionPlan;
 
 public class Archives {
 
@@ -31,12 +28,7 @@ public class Archives {
         ZIP(".tar.gz", new TarGzipExtractor());
 
         public final String extension;
-        public final Extractor extractor;
 
-    }
-
-    public static interface Extractor {
-        public void extract(File archive, File destDir, ExtractionPlan plan) throws IOException;
     }
 
 }

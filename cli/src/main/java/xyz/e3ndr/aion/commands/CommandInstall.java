@@ -26,6 +26,7 @@ import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.Resolver;
 import xyz.e3ndr.aion.UserInput;
 import xyz.e3ndr.aion.Util;
+import xyz.e3ndr.aion.archive.ApacheArchiveExtractor;
 import xyz.e3ndr.aion.archive.Archives;
 import xyz.e3ndr.aion.configuration.Installed;
 import xyz.e3ndr.aion.configuration.Installed.InstallCacheEntry;
@@ -177,7 +178,7 @@ public class CommandInstall implements Runnable {
                 Aion.LOGGER.info("Downloaded '%s'", downloadedFile);
             }
 
-            format.extractor.extract(downloadedFile, downloadWorkingDir, version.getExtractionPlan());
+            ApacheArchiveExtractor.extract(format, downloadedFile, downloadWorkingDir, version.getExtractionPlan());
             downloadedFile.delete();
 
             File packageWorkingDir = new File(

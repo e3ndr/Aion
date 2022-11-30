@@ -24,8 +24,14 @@ public class Archives {
 
     @AllArgsConstructor
     public static enum Format {
-        TAR_GZ(".zip", new ZipExtractor()),
-        ZIP(".tar.gz", new TarGzipExtractor());
+        // @formatter:off
+        TAR_GZ(".tar.gz"),
+        TAR_XZ(".tar.xz"),
+        TAR   (".tar"),
+        _7ZIP (".7z"),
+        ZIP   (".zip"),
+        ;
+        // @formatter:on
 
         public final String extension;
 

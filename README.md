@@ -39,7 +39,4 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Removing a source.
   - [x] Refreshing the local source cache, similar to `apt update`.
 
-- [ ] Archives
-
-  - [x] Extracting `.zip` archives.
-  - [ ] Extracting `.tar.gz` archives.
+- [x] Archives

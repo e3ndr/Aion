@@ -31,6 +31,7 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Updating which package controls what command.
   - [x] A path rebuild command.
   - [x] The RUN command.
+  - [ ] Adding a package's dependencies to it's path in the launch command.
 
 - [x] Sources
 

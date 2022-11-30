@@ -23,6 +23,7 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Removing a package.
   - [ ] Pruning any orphaned dependencies. (A dependency on the path will NOT be considered orphaned)
   - [x] Updating all packages by parsing and comparing the `patch` version.
+  - [x] Archive decompression support.
 
 - [x] Path
 
@@ -39,5 +40,3 @@ Get started over at the [Wiki](https://github.com/e3ndr/Aion/wiki).
   - [x] Adding a new source.
   - [x] Removing a source.
   - [x] Refreshing the local source cache, similar to `apt update`.
-
-- [x] Archives

@@ -23,14 +23,13 @@ PLATFORMS=(
     "distribution='WINDOWS_NT';arch='X86_64'"
     "distribution='WINDOWS_NT';arch='X86'"
 
-    # ---- TODO implement the decompression for .tar.gz so we can build for Linux and macOS. ----
     # Linux
-    #"distribution='LINUX';arch='X86_64'"
-    #"distribution='LINUX';arch='AARCH64'"
-    #"distribution='LINUX';arch='ARM'"
+    "distribution='LINUX';arch='X86_64'"
+    "distribution='LINUX';arch='AARCH64'"
+    "distribution='LINUX';arch='ARM'"
 
     # macOS
-    #"distribution='MACOS';arch='X86_64'"
+    "distribution='MACOS';arch='X86_64'"
     #"distribution='MACOS';arch='AARCH64'"
 )
 

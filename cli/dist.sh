@@ -83,7 +83,7 @@ for entry in ${PLATFORMS[@]}; do
         # We want to use zip on windows.
         zip -r "../$archiveName.zip" "."
     else
-        tar czf "../$archiveName.tar.gz" "."
+        tar czf "../$archiveName.tar.gz" *
     fi
 
     cd ../..

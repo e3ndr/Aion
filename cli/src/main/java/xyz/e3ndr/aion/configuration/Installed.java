@@ -28,7 +28,10 @@ public class Installed {
         try {
             Files.write(
                 FILE.toPath(),
-                Rson.DEFAULT.toJsonString(installList).getBytes(StandardCharsets.UTF_8)
+                Rson.DEFAULT
+                    .toJson(installList)
+                    .toString(true)
+                    .getBytes(StandardCharsets.UTF_8)
             );
             Aion.LOGGER.info("Updated install cache.");
         } catch (IOException e) {

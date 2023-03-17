@@ -22,7 +22,10 @@ public class Sources {
         try {
             Files.write(
                 FILE.toPath(),
-                Rson.DEFAULT.toJsonString(sourcesCache).getBytes(StandardCharsets.UTF_8)
+                Rson.DEFAULT
+                    .toJson(sourcesCache)
+                    .toString(true)
+                    .getBytes(StandardCharsets.UTF_8)
             );
             Aion.LOGGER.info("Updated sources cache.");
         } catch (IOException e) {

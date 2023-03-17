@@ -45,7 +45,10 @@ public class Config {
         try {
             Files.write(
                 FILE.toPath(),
-                Rson.DEFAULT.toJsonString(this).getBytes(StandardCharsets.UTF_8)
+                Rson.DEFAULT
+                    .toJson(this)
+                    .toString(true)
+                    .getBytes(StandardCharsets.UTF_8)
             );
             Aion.LOGGER.debug("Updated config.");
         } catch (IOException e) {

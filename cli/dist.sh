@@ -72,6 +72,9 @@ for entry in ${PLATFORMS[@]}; do
     rm $folder/path/java
     rm $folder/path/java.bat # Added during the install/download of java for the runtime.
 
+    # Add the Windows alias helper.
+    cp "src/main/c/windows-exe-alias.exe" "$folder/windows-exe-alias.exe"
+
     echo "-- Compressing..."
     cd $folder
     archiveName="$distribution-$arch"

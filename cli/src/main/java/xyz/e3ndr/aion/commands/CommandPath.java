@@ -17,6 +17,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import xyz.e3ndr.aion.Aion;
 import xyz.e3ndr.aion.Resolver;
+import xyz.e3ndr.aion.WindowsExeAlias;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathRebuild;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathUpdate;
 import xyz.e3ndr.aion.commands.CommandPath.CommandPathWhat;
@@ -210,6 +211,7 @@ public class CommandPath implements Runnable {
 
                     new File(Aion.PATH_DIR, command).delete();
                     new File(Aion.PATH_DIR, command + ".bat").delete();
+                    new File(Aion.PATH_DIR, command + ".exe").delete();
 
                     continue;
                 }
@@ -232,6 +234,9 @@ public class CommandPath implements Runnable {
             File unixExecutableFile = new File(Aion.PATH_DIR, "aion");
             File windowsExecutableFile = new File(Aion.PATH_DIR, "aion.bat");
 
+            unixExecutableFile.delete();
+            windowsExecutableFile.delete();
+
             Files.write(
                 unixExecutableFile.toPath(),
                 Resolver
@@ -246,6 +251,7 @@ public class CommandPath implements Runnable {
                     .getBytes()
             );
 
+            WindowsExeAlias.create("aion");
             unixExecutableFile.setExecutable(true);
         } catch (IOException e) {
             Aion.LOGGER.warn("Unable to write the `aion` command to path. Things may break.\n%s", e.getMessage());
@@ -255,6 +261,12 @@ public class CommandPath implements Runnable {
     private static void updateLocalPath(String pkg, String version, String commandName) {
         AsyncTask.createNonDaemon(() -> {
             try {
+                File unixExecutableFile = new File(Aion.PATH_DIR, commandName);
+                File windowsExecutableFile = new File(Aion.PATH_DIR, commandName + ".bat");
+
+                unixExecutableFile.delete();
+                windowsExecutableFile.delete();
+
                 String unixExecutable = Resolver.getString("resource:///path/path_format");
                 String windowsExecutable = Resolver.getString("resource:///path/path_format.bat");
 
@@ -267,12 +279,10 @@ public class CommandPath implements Runnable {
                     .replace("{version}", version)
                     .replace("{command}", commandName + ".bat");
 
-                File unixExecutableFile = new File(Aion.PATH_DIR, commandName);
-                File windowsExecutableFile = new File(Aion.PATH_DIR, commandName + ".bat");
-
                 Files.write(unixExecutableFile.toPath(), unixExecutable.getBytes());
                 Files.write(windowsExecutableFile.toPath(), windowsExecutable.getBytes());
 
+                WindowsExeAlias.create(commandName);
                 unixExecutableFile.setExecutable(true);
             } catch (IOException e) {
                 Aion.LOGGER.warn("Unable to write the `%s` command to path. Things may break.\n%s", commandName, e.getMessage());
